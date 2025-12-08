@@ -62,9 +62,11 @@ def generar_pdf():
         # --- 1. INFORMACIÓN DEL PREDIO ---
         # (Coordenadas inventadas, TÚ las ajustas luego)
         c.drawString(18, 482, request.form.get('direccion') or "")
+        
         c.drawString(18, 454, request.form.get('departamento') or "")
         c.drawString(215, 454, request.form.get('provincia') or "")
         c.drawString(419, 454, request.form.get('distrito') or "")
+
         # Manzana, Lote, etc.
         c.drawString(18, 427, request.form.get('manzana') or "")
         c.drawString(115, 427, request.form.get('lote') or "")
@@ -73,52 +75,73 @@ def generar_pdf():
         c.drawString(419, 427, request.form.get('referencia') or "")
 
         # --- 2. JEFE DE FAMILIA ---
-        c.drawString(100, 680, request.form.get('nombres_jefe') or "")
-        c.drawString(250, 680, request.form.get('ap_paterno_jefe') or "")
-        c.drawString(400, 680, request.form.get('ap_materno_jefe') or "")
-        c.drawString(100, 660, request.form.get('dni_jefe') or "")
-        
-        # FECHA FORMATEADA
-        fecha_nac_jefe = format_fecha(request.form.get('nacimiento_jefe'))
-        c.drawString(200, 660, fecha_nac_jefe)
-        
-        c.drawString(300, 660, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
-        c.drawString(100, 640, request.form.get('grado_instruccion') or "")
-        c.drawString(250, 640, request.form.get('ocupacion') or "")
-
-        # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
-        disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
-        if disc_jefe == 'Permanente':
-            c.drawString(400, 640, "X") # Coordenada casilla Permanente
-        elif disc_jefe == 'Severa':
-            c.drawString(450, 640, "X") # Coordenada casilla Severa
-        
+        c.drawString(18, 364, request.form.get('nombres_jefe') or "")
+        c.drawString(155, 364, request.form.get('ap_paterno_jefe') or "")
+        c.drawString(290, 364, request.form.get('ap_materno_jefe') or "")
         # --- RADIO BUTTONS: SITUACIÓN LABORAL JEFE ---
         sit_jefe = request.form.get('sit_laboral')
         if sit_jefe == 'Dependiente':
-            c.drawString(100, 620, "X")
+            c.drawString(430, 364, "X")
         elif sit_jefe == 'Independiente':
-            c.drawString(150, 620, "X")
+            c.drawString(470, 364, "X")
 
+        c.drawString(18, 264, request.form.get('dni_jefe') or "")          # <----------- AQUI ME QUEDEEEEEEEEEEEEEEEEEEEEEE
+        # FECHA FORMATEADA
+        fecha_nac_jefe = format_fecha(request.form.get('nacimiento_jefe'))
+        c.drawString(200, 660, fecha_nac_jefe)
+        c.drawString(300, 660, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
         # --- RADIO BUTTONS: CONDICIÓN JEFE ---
         cond_jefe = request.form.get('condicion_eco')
         if cond_jefe == 'Formal':
             c.drawString(300, 620, "X")
         elif cond_jefe == 'Informal':
             c.drawString(350, 620, "X")
-            
+
+        c.drawString(100, 640, request.form.get('grado_instruccion') or "")
+        c.drawString(250, 640, request.form.get('ocupacion') or "")
+        # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
+        disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
+        if disc_jefe == 'Permanente':
+            c.drawString(400, 640, "X") # Coordenada casilla Permanente
+        elif disc_jefe == 'Severa':
+            c.drawString(450, 640, "X") # Coordenada casilla Severa
         c.drawString(500, 620, request.form.get('ingreso_mensual') or "0.00")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
         c.drawString(100, 580, request.form.get('nombres_conyuge') or "")
-        # ... Agrega los demás campos de texto del cónyuge aquí con sus coordenadas ...
+        c.drawString(250, 580, request.form.get('ap_paterno_conyuge') or "")
+        c.drawString(400, 580, request.form.get('ap_materno_conyuge') or "")
+        # --- RADIO BUTTONS: SITUACIÓN LABORAL CÓNYUGE ---
+        sit_conyuge = request.form.get('sit_laboral_conyuge')
+        if sit_conyuge == 'Dependiente':
+            c.drawString(100, 520, "X")
+        elif sit_conyuge == 'Independiente':
+            c.drawString(150, 520, "X")
 
+        c.drawString(100, 560, request.form.get('dni_conyuge') or "")
+        # Usamos la función format_fecha para que salga DD/MM/YYYY
+        fecha_nac_conyuge = format_fecha(request.form.get('nacimiento_conyuge'))
+        c.drawString(200, 560, fecha_nac_conyuge)
+        c.drawString(300, 560, request.form.get('estado_civil_conyuge') or "")
+        # ... Agrega los demás campos de texto del cónyuge aquí con sus coordenadas ...
         # Radios Cónyuge
+        # --- RADIO BUTTONS: CONDICIÓN ECONÓMICA CÓNYUGE ---
+        cond_conyuge = request.form.get('condicion_conyuge')
+        if cond_conyuge == 'Formal':
+            c.drawString(300, 520, "X")
+        elif cond_conyuge == 'Informal':
+            c.drawString(350, 520, "X")
+        
+        # Fila 3: Instrucción y Ocupación
+        c.drawString(100, 540, request.form.get('grado_instruccion_conyuge') or "")
+        c.drawString(250, 540, request.form.get('ocupacion_conyuge') or "")
         disc_conyuge = request.form.get('discapacidad_conyuge')
         if disc_conyuge == 'Permanente':
             c.drawString(400, 540, "X")
         elif disc_conyuge == 'Severa':
             c.drawString(450, 540, "X")
+        # Ingreso Mensual
+        c.drawString(500, 520, request.form.get('ingreso_mensual_conyuge') or "0.00")
 
         # --- 4. CARGA FAMILIAR (Tabla de 3 filas) ---
         # Fila 1
