@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, redirect, url_for
 from pypdf import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
+from datetime import datetime
 import io
 import os
 
@@ -47,54 +48,141 @@ def formulario():
 @app.route('/generar', methods=['POST'])
 def generar_pdf():
     if not os.path.exists(NOMBRE_PLANTILLA):
-        return "Error: No encuentro la plantilla.", 404
+        return "Error: No encuentro la plantilla (asegúrate que el nombre coincida).", 404
 
     try:
-        # 1. RECIBIR DATOS DEL FORMULARIO
-        nombre = request.form.get('nombre_cliente') or "Sin Nombre"
-        ciudad = request.form.get('ciudad') or "Sin Ciudad"
-        fecha = request.form.get('fecha_hoy') or "Sin Fecha"
-
-        # 2. CREAR LA "HOJA TRANSPARENTE" (Overlay) EN MEMORIA
+        # 1. CREAMOS EL LIENZO (CANVAS)
         packet = io.BytesIO()
-        # Creamos un "lienzo" (canvas) para dibujar
         c = canvas.Canvas(packet, pagesize=A4)
 
-        # --- DIBUJANDO EN LA PÁGINA 1 ---
-        # c.drawString(X, Y, Texto) -> Recuerda: (0,0) es abajo-izquierda
-        c.drawString(100, 700, f"Nombre: {nombre}")  # Arriba a la izquierda
-        c.drawString(100, 680, f"Ciudad: {ciudad}")  # Un poco más abajo
+        # ==========================================
+        #  PÁGINA 1: Secciones 1, 2, 3 y 4
+        # ==========================================
         
-        # Terminamos la página 1 y pasamos a la siguiente
-        c.showPage() 
+        # --- 1. INFORMACIÓN DEL PREDIO ---
+        # (Coordenadas inventadas, TÚ las ajustas luego)
+        c.drawString(18, 482, request.form.get('direccion') or "")
+        c.drawString(18, 454, request.form.get('departamento') or "")
+        c.drawString(215, 454, request.form.get('provincia') or "")
+        c.drawString(419, 454, request.form.get('distrito') or "")
+        # Manzana, Lote, etc.
+        c.drawString(18, 427, request.form.get('manzana') or "")
+        c.drawString(115, 427, request.form.get('lote') or "")
+        c.drawString(215, 427, request.form.get('sublote') or "")
+        c.drawString(317, 427, request.form.get('centro_poblado') or "")
+        c.drawString(419, 427, request.form.get('referencia') or "")
 
-        # --- DIBUJANDO EN LA PÁGINA 2 ---
-        c.drawString(300, 500, f"Fecha de firma: {fecha}") # En el medio aprox.
-        c.drawString(300, 480, "Firmado digitalmente")
+        # --- 2. JEFE DE FAMILIA ---
+        c.drawString(100, 680, request.form.get('nombres_jefe') or "")
+        c.drawString(250, 680, request.form.get('ap_paterno_jefe') or "")
+        c.drawString(400, 680, request.form.get('ap_materno_jefe') or "")
+        c.drawString(100, 660, request.form.get('dni_jefe') or "")
         
-        # Guardamos el lienzo
+        # FECHA FORMATEADA
+        fecha_nac_jefe = format_fecha(request.form.get('nacimiento_jefe'))
+        c.drawString(200, 660, fecha_nac_jefe)
+        
+        c.drawString(300, 660, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
+        c.drawString(100, 640, request.form.get('grado_instruccion') or "")
+        c.drawString(250, 640, request.form.get('ocupacion') or "")
+
+        # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
+        disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
+        if disc_jefe == 'Permanente':
+            c.drawString(400, 640, "X") # Coordenada casilla Permanente
+        elif disc_jefe == 'Severa':
+            c.drawString(450, 640, "X") # Coordenada casilla Severa
+        
+        # --- RADIO BUTTONS: SITUACIÓN LABORAL JEFE ---
+        sit_jefe = request.form.get('sit_laboral')
+        if sit_jefe == 'Dependiente':
+            c.drawString(100, 620, "X")
+        elif sit_jefe == 'Independiente':
+            c.drawString(150, 620, "X")
+
+        # --- RADIO BUTTONS: CONDICIÓN JEFE ---
+        cond_jefe = request.form.get('condicion_eco')
+        if cond_jefe == 'Formal':
+            c.drawString(300, 620, "X")
+        elif cond_jefe == 'Informal':
+            c.drawString(350, 620, "X")
+            
+        c.drawString(500, 620, request.form.get('ingreso_mensual') or "0.00")
+
+        # --- 3. CÓNYUGE (Misma lógica) ---
+        c.drawString(100, 580, request.form.get('nombres_conyuge') or "")
+        # ... Agrega los demás campos de texto del cónyuge aquí con sus coordenadas ...
+
+        # Radios Cónyuge
+        disc_conyuge = request.form.get('discapacidad_conyuge')
+        if disc_conyuge == 'Permanente':
+            c.drawString(400, 540, "X")
+        elif disc_conyuge == 'Severa':
+            c.drawString(450, 540, "X")
+
+        # --- 4. CARGA FAMILIAR (Tabla de 3 filas) ---
+        # Fila 1
+        c.drawString(50, 400, request.form.get('nombres_carga_1') or "")
+        c.drawString(150, 400, request.form.get('dni_carga_1') or "")
+        c.drawString(200, 400, format_fecha(request.form.get('nacimiento_carga_1')))
+        # ... Radio carga 1 ...
+        disc_carga_1 = request.form.get('discapacidad_carga_1')
+        if disc_carga_1 == 'Permanente':
+            c.drawString(400, 400, "X")
+        elif disc_carga_1 == 'Severa':
+            c.drawString(450, 400, "X")
+
+        # Fila 2
+        c.drawString(50, 380, request.form.get('nombres_carga_2') or "")
+        # ... repetir lógica para fila 2 ...
+
+        # Fila 3
+        c.drawString(50, 360, request.form.get('nombres_carga_3') or "")
+        # ... repetir lógica para fila 3 ...
+
+
+        # ==========================================
+        #  CAMBIO DE PÁGINA (Aquí ocurre la magia)
+        # ==========================================
+        c.showPage() 
+        # A partir de aquí, las coordenadas (0,0) son de la PÁGINA 2
+        
+        # ==========================================
+        #  PÁGINA 2: Secciones 5 y 6
+        # ==========================================
+
+        # --- 5. INFORMACIÓN ADICIONAL ---
+        # Recuerda: Y empieza desde abajo. 700 es arriba de la hoja 2.
+        c.drawString(100, 700, request.form.get('nombres_adic_1') or "")
+        c.drawString(200, 700, request.form.get('ap_paterno_adic_1') or "")
+        c.drawString(300, 700, request.form.get('ap_materno_adic_1') or "")
+        c.drawString(400, 700, request.form.get('dni_adic_1') or "")
+        c.drawString(500, 700, request.form.get('vinculo_adic_1') or "")
+
+        # --- 6. CONTACTO ---
+        c.drawString(100, 600, request.form.get('correo_contacto') or "")
+        c.drawString(300, 600, request.form.get('telefono_contacto') or "")
+
+        # FINALIZAR
         c.save()
         packet.seek(0)
 
-        # 3. FUSIONAR EL ORIGINAL CON LO QUE DIBUJAMOS
-        # Leemos el PDF que acabamos de crear en memoria
+        # 2. FUSIÓN (Merge)
         new_pdf = PdfReader(packet)
-        # Leemos la plantilla original
         existing_pdf = PdfReader(NOMBRE_PLANTILLA)
         output = PdfWriter()
 
-        # Recorremos las páginas de la plantilla original
-        # y le pegamos encima nuestra hoja transparente página por página
+        # Recorremos las páginas del original
         for i in range(len(existing_pdf.pages)):
             page = existing_pdf.pages[i]
             
-            # Si nuestra "hoja transparente" tiene contenido para esta página, lo pegamos
+            # Si nuestra "capa de datos" tiene esa página, la pegamos
             if i < len(new_pdf.pages):
                 page.merge_page(new_pdf.pages[i])
             
             output.add_page(page)
 
-        # 4. GUARDAR Y ENVIAR
+        # 3. ENVIAR AL NAVEGADOR
         output_stream = io.BytesIO()
         output.write(output_stream)
         output_stream.seek(0)
@@ -102,12 +190,23 @@ def generar_pdf():
         return send_file(
             output_stream,
             as_attachment=True,
-            download_name=f"Documento_{nombre}.pdf",
+            download_name=f"Ficha_{request.form.get('dni_jefe')}.pdf",
             mimetype='application/pdf'
         )
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"<h1>Ocurrió un error:</h1><p>{str(e)}</p>"
+
+
+def format_fecha(fecha_str):
+    """Convierte YYYY-MM-DD a DD/MM/YYYY"""
+    if not fecha_str:
+        return ""
+    try:
+        fecha_obj = datetime.strptime(fecha_str, '%Y-%m-%d')
+        return fecha_obj.strftime('%d/%m/%Y')
+    except:
+        return fecha_str # Si falla, devuelve el texto original
 
 if __name__ == '__main__':
     app.run(debug=True)
