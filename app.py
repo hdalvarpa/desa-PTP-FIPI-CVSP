@@ -81,31 +81,31 @@ def generar_pdf():
         # --- RADIO BUTTONS: SITUACIÓN LABORAL JEFE ---
         sit_jefe = request.form.get('sit_laboral')
         if sit_jefe == 'Dependiente':
-            c.drawString(430, 364, "X")
+            c.drawString(429, 364, "X")
         elif sit_jefe == 'Independiente':
-            c.drawString(470, 364, "X")
+            c.drawString(507, 364, "X")
 
-        c.drawString(18, 264, request.form.get('dni_jefe') or "")          # <----------- AQUI ME QUEDEEEEEEEEEEEEEEEEEEEEEE
+        c.drawString(18, 336, request.form.get('dni_jefe') or "")          # <----------- AQUI ME QUEDEEEEEEEEEEEEEEEEEEEEEE
         # FECHA FORMATEADA
         fecha_nac_jefe = format_fecha(request.form.get('nacimiento_jefe'))
-        c.drawString(200, 660, fecha_nac_jefe)
-        c.drawString(300, 660, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
+        c.drawString(155, 336, fecha_nac_jefe)
+        c.drawString(290, 336, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
         # --- RADIO BUTTONS: CONDICIÓN JEFE ---
         cond_jefe = request.form.get('condicion_eco')
         if cond_jefe == 'Formal':
-            c.drawString(300, 620, "X")
+            c.drawString(429, 336, "X")
         elif cond_jefe == 'Informal':
-            c.drawString(350, 620, "X")
+            c.drawString(507, 336, "X")
 
-        c.drawString(100, 640, request.form.get('grado_instruccion') or "")
-        c.drawString(250, 640, request.form.get('ocupacion') or "")
+        c.drawString(18, 310, request.form.get('grado_instruccion') or "")
+        c.drawString(155, 310, request.form.get('ocupacion') or "")
         # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
         disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
         if disc_jefe == 'Permanente':
-            c.drawString(400, 640, "X") # Coordenada casilla Permanente
+            c.drawString(300, 308, "X") # Coordenada casilla Permanente
         elif disc_jefe == 'Severa':
-            c.drawString(450, 640, "X") # Coordenada casilla Severa
-        c.drawString(500, 620, request.form.get('ingreso_mensual') or "0.00")
+            c.drawString(368, 308, "X") # Coordenada casilla Severa
+        c.drawString(419, 310, request.form.get('ingreso_mensual') or "0.00")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
         c.drawString(100, 580, request.form.get('nombres_conyuge') or "")
