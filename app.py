@@ -108,61 +108,82 @@ def generar_pdf():
         c.drawString(419, 310, request.form.get('ingreso_mensual') or "0.00")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
-        c.drawString(100, 580, request.form.get('nombres_conyuge') or "")
-        c.drawString(250, 580, request.form.get('ap_paterno_conyuge') or "")
-        c.drawString(400, 580, request.form.get('ap_materno_conyuge') or "")
+        c.drawString(18, 243, request.form.get('nombres_conyuge') or "")
+        c.drawString(155, 243, request.form.get('ap_paterno_conyuge') or "")
+        c.drawString(290, 243, request.form.get('ap_materno_conyuge') or "")
         # --- RADIO BUTTONS: SITUACIÓN LABORAL CÓNYUGE ---
         sit_conyuge = request.form.get('sit_laboral_conyuge')
         if sit_conyuge == 'Dependiente':
-            c.drawString(100, 520, "X")
+            c.drawString(429, 243, "X")
         elif sit_conyuge == 'Independiente':
-            c.drawString(150, 520, "X")
+            c.drawString(507, 243, "X")
 
-        c.drawString(100, 560, request.form.get('dni_conyuge') or "")
+        c.drawString(18, 215, request.form.get('dni_conyuge') or "")
         # Usamos la función format_fecha para que salga DD/MM/YYYY
         fecha_nac_conyuge = format_fecha(request.form.get('nacimiento_conyuge'))
-        c.drawString(200, 560, fecha_nac_conyuge)
-        c.drawString(300, 560, request.form.get('estado_civil_conyuge') or "")
+        c.drawString(155, 215, fecha_nac_conyuge)
+        c.drawString(290, 215, request.form.get('estado_civil_conyuge') or "")
         # ... Agrega los demás campos de texto del cónyuge aquí con sus coordenadas ...
         # Radios Cónyuge
         # --- RADIO BUTTONS: CONDICIÓN ECONÓMICA CÓNYUGE ---
         cond_conyuge = request.form.get('condicion_conyuge')
         if cond_conyuge == 'Formal':
-            c.drawString(300, 520, "X")
+            c.drawString(429, 215, "X")
         elif cond_conyuge == 'Informal':
-            c.drawString(350, 520, "X")
+            c.drawString(507, 215, "X")
         
         # Fila 3: Instrucción y Ocupación
-        c.drawString(100, 540, request.form.get('grado_instruccion_conyuge') or "")
-        c.drawString(250, 540, request.form.get('ocupacion_conyuge') or "")
+        c.drawString(18, 187, request.form.get('grado_instruccion_conyuge') or "")
+        c.drawString(155, 187, request.form.get('ocupacion_conyuge') or "")
         disc_conyuge = request.form.get('discapacidad_conyuge')
         if disc_conyuge == 'Permanente':
-            c.drawString(400, 540, "X")
+            c.drawString(300, 187, "X")
         elif disc_conyuge == 'Severa':
-            c.drawString(450, 540, "X")
+            c.drawString(368, 187, "X")
         # Ingreso Mensual
-        c.drawString(500, 520, request.form.get('ingreso_mensual_conyuge') or "0.00")
+        c.drawString(419, 187, request.form.get('ingreso_mensual_conyuge') or "0.00")
 
         # --- 4. CARGA FAMILIAR (Tabla de 3 filas) ---
+
         # Fila 1
-        c.drawString(50, 400, request.form.get('nombres_carga_1') or "")
-        c.drawString(150, 400, request.form.get('dni_carga_1') or "")
-        c.drawString(200, 400, format_fecha(request.form.get('nacimiento_carga_1')))
-        # ... Radio carga 1 ...
+        c.drawString(38, 117, request.form.get('nombres_carga_1') or "")
+        c.drawString(230, 117, request.form.get('dni_carga_1') or "")
+        c.drawString(288, 117, format_fecha(request.form.get('nacimiento_carga_1')))
+        c.drawString(366, 117, request.form.get('vinculo_carga_1') or "")
+        c.drawString(407, 117, request.form.get('instruccion_carga_1') or "")
+            
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
-            c.drawString(400, 400, "X")
+            c.drawString(469, 120, "X")
         elif disc_carga_1 == 'Severa':
-            c.drawString(450, 400, "X")
+            c.drawString(537, 120, "X")
+            
 
         # Fila 2
-        c.drawString(50, 380, request.form.get('nombres_carga_2') or "")
-        # ... repetir lógica para fila 2 ...
+        c.drawString(38, 88, request.form.get('nombres_carga_2') or "")
+        c.drawString(230, 88, request.form.get('dni_carga_2') or "")
+        c.drawString(288, 88, format_fecha(request.form.get('nacimiento_carga_2')))
+        c.drawString(366, 88, request.form.get('vinculo_carga_2') or "")
+        c.drawString(407, 88, request.form.get('instruccion_carga_2') or "")
+            
+        disc_carga_2 = request.form.get('discapacidad_carga_2')
+        if disc_carga_2 == 'Permanente':
+            c.drawString(469, 94, "X")
+        elif disc_carga_2 == 'Severa':
+            c.drawString(537, 94, "X")
 
         # Fila 3
-        c.drawString(50, 360, request.form.get('nombres_carga_3') or "")
-        # ... repetir lógica para fila 3 ...
-
+        c.drawString(38, 61, request.form.get('nombres_carga_3') or "")
+        c.drawString(230, 61, request.form.get('dni_carga_3') or "")
+        c.drawString(288, 61, format_fecha(request.form.get('nacimiento_carga_3')))
+        c.drawString(366, 61, request.form.get('vinculo_carga_3') or "")
+        c.drawString(407, 61, request.form.get('instruccion_carga_3') or "")
+            
+        disc_carga_3 = request.form.get('discapacidad_carga_3')
+        if disc_carga_3 == 'Permanente':
+            c.drawString(469, 65, "X")
+        elif disc_carga_3 == 'Severa':
+            c.drawString(537, 65, "X")
 
         # ==========================================
         #  CAMBIO DE PÁGINA (Aquí ocurre la magia)
@@ -176,15 +197,14 @@ def generar_pdf():
 
         # --- 5. INFORMACIÓN ADICIONAL ---
         # Recuerda: Y empieza desde abajo. 700 es arriba de la hoja 2.
-        c.drawString(100, 700, request.form.get('nombres_adic_1') or "")
-        c.drawString(200, 700, request.form.get('ap_paterno_adic_1') or "")
-        c.drawString(300, 700, request.form.get('ap_materno_adic_1') or "")
-        c.drawString(400, 700, request.form.get('dni_adic_1') or "")
-        c.drawString(500, 700, request.form.get('vinculo_adic_1') or "")
-
+        c.drawString(38, 784, request.form.get('nombres_adic_1') or "")
+        c.drawString(175, 784, request.form.get('ap_paterno_adic_1') or "")
+        c.drawString(275, 784, request.form.get('ap_materno_adic_1') or "")
+        c.drawString(377, 784, request.form.get('dni_adic_1') or "")
+        c.drawString(477, 784, request.form.get('vinculo_adic_1') or "")
         # --- 6. CONTACTO ---
-        c.drawString(100, 600, request.form.get('correo_contacto') or "")
-        c.drawString(300, 600, request.form.get('telefono_contacto') or "")
+        c.drawString(18, 694, request.form.get('correo_contacto') or "")
+        c.drawString(305, 694, request.form.get('telefono_contacto') or "")
 
         # FINALIZAR
         c.save()
