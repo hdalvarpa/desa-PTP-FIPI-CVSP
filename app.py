@@ -55,6 +55,8 @@ def generar_pdf():
         packet = io.BytesIO()
         c = canvas.Canvas(packet, pagesize=A4)
 
+
+        c.setFont("Helvetica", 9)
         # ==========================================
         #  PÁGINA 1: Secciones 1, 2, 3 y 4
         # ==========================================
@@ -85,7 +87,7 @@ def generar_pdf():
         elif sit_jefe == 'Independiente':
             c.drawString(507, 364, "X")
 
-        c.drawString(18, 336, request.form.get('dni_jefe') or "")          # <----------- AQUI ME QUEDEEEEEEEEEEEEEEEEEEEEEE
+        c.drawString(18, 336, request.form.get('dni_jefe') or "")        
         # FECHA FORMATEADA
         fecha_nac_jefe = format_fecha(request.form.get('nacimiento_jefe'))
         c.drawString(155, 336, fecha_nac_jefe)
@@ -149,8 +151,8 @@ def generar_pdf():
         c.drawString(38, 117, request.form.get('nombres_carga_1') or "")
         c.drawString(230, 117, request.form.get('dni_carga_1') or "")
         c.drawString(288, 117, format_fecha(request.form.get('nacimiento_carga_1')))
-        c.drawString(366, 117, request.form.get('vinculo_carga_1') or "")
-        c.drawString(407, 117, request.form.get('instruccion_carga_1') or "")
+        c.drawString(365, 117, request.form.get('vinculo_carga_1') or "")
+        c.drawString(406, 117, request.form.get('instruccion_carga_1') or "")
             
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
@@ -163,8 +165,8 @@ def generar_pdf():
         c.drawString(38, 88, request.form.get('nombres_carga_2') or "")
         c.drawString(230, 88, request.form.get('dni_carga_2') or "")
         c.drawString(288, 88, format_fecha(request.form.get('nacimiento_carga_2')))
-        c.drawString(366, 88, request.form.get('vinculo_carga_2') or "")
-        c.drawString(407, 88, request.form.get('instruccion_carga_2') or "")
+        c.drawString(365, 88, request.form.get('vinculo_carga_2') or "")
+        c.drawString(406, 88, request.form.get('instruccion_carga_2') or "")
             
         disc_carga_2 = request.form.get('discapacidad_carga_2')
         if disc_carga_2 == 'Permanente':
@@ -176,8 +178,8 @@ def generar_pdf():
         c.drawString(38, 61, request.form.get('nombres_carga_3') or "")
         c.drawString(230, 61, request.form.get('dni_carga_3') or "")
         c.drawString(288, 61, format_fecha(request.form.get('nacimiento_carga_3')))
-        c.drawString(366, 61, request.form.get('vinculo_carga_3') or "")
-        c.drawString(407, 61, request.form.get('instruccion_carga_3') or "")
+        c.drawString(365, 61, request.form.get('vinculo_carga_3') or "")
+        c.drawString(406, 61, request.form.get('instruccion_carga_3') or "")
             
         disc_carga_3 = request.form.get('discapacidad_carga_3')
         if disc_carga_3 == 'Permanente':
@@ -189,6 +191,8 @@ def generar_pdf():
         #  CAMBIO DE PÁGINA (Aquí ocurre la magia)
         # ==========================================
         c.showPage() 
+
+        c.setFont("Helvetica", 9)
         # A partir de aquí, las coordenadas (0,0) son de la PÁGINA 2
         
         # ==========================================
