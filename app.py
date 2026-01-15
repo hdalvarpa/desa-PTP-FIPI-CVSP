@@ -107,7 +107,7 @@ def generar_pdf():
             c.drawString(300, 308, "X") # Coordenada casilla Permanente
         elif disc_jefe == 'Severa':
             c.drawString(368, 308, "X") # Coordenada casilla Severa
-        c.drawString(419, 310, request.form.get('ingreso_mensual') or "0.00")
+        c.drawString(419, 310, request.form.get('ingreso_mensual') or "")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
         c.drawString(18, 243, request.form.get('nombres_conyuge') or "")
@@ -143,7 +143,7 @@ def generar_pdf():
         elif disc_conyuge == 'Severa':
             c.drawString(368, 187, "X")
         # Ingreso Mensual
-        c.drawString(419, 187, request.form.get('ingreso_mensual_conyuge') or "0.00")
+        c.drawString(419, 187, request.form.get('ingreso_mensual_conyuge') or "")
 
         # --- 4. CARGA FAMILIAR (Tabla de 3 filas) ---
 
@@ -151,22 +151,48 @@ def generar_pdf():
         c.drawString(38, 117, request.form.get('nombres_carga_1') or "")
         c.drawString(230, 117, request.form.get('dni_carga_1') or "")
         c.drawString(288, 117, format_fecha(request.form.get('nacimiento_carga_1')))
+
+        c.setFont("Helvetica", 7.5)
         c.drawString(365, 117, request.form.get('vinculo_carga_1') or "")
-        c.drawString(406, 117, request.form.get('instruccion_carga_1') or "")
-            
+
+        c.setFont("Helvetica", 6.9)
+
+        inst_1 = request.form.get('instruccion_carga_1') or ""
+        inst_1 = inst_1.strip().upper()
+        if inst_1 in ["SIN INSTRUCCION", "SIN INSTRUCCIÓN"]:
+            c.drawString(405, 122, "SIN")         
+            c.drawString(405, 114, "INSTRUCCIÓN") 
+        else:
+            c.drawString(405, 117, inst_1)
+        
+        c.setFont("Helvetica", 9)
+
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
             c.drawString(469, 120, "X")
         elif disc_carga_1 == 'Severa':
             c.drawString(537, 120, "X")
-            
-
+        
         # Fila 2
         c.drawString(38, 88, request.form.get('nombres_carga_2') or "")
         c.drawString(230, 88, request.form.get('dni_carga_2') or "")
         c.drawString(288, 88, format_fecha(request.form.get('nacimiento_carga_2')))
+
+        c.setFont("Helvetica", 7.5)
         c.drawString(365, 88, request.form.get('vinculo_carga_2') or "")
-        c.drawString(406, 88, request.form.get('instruccion_carga_2') or "")
+
+        c.setFont("Helvetica", 6.9)
+
+        inst_2 = request.form.get('instruccion_carga_2') or ""
+        inst_2 = inst_2.strip().upper()
+        if inst_2 in ["SIN INSTRUCCION", "SIN INSTRUCCIÓN"]:
+            c.drawString(405, 92, "SIN")         
+            c.drawString(405, 84, "INSTRUCCIÓN") 
+        else:
+            c.drawString(405, 88, inst_2)
+        
+        c.setFont("Helvetica", 9)
+
             
         disc_carga_2 = request.form.get('discapacidad_carga_2')
         if disc_carga_2 == 'Permanente':
@@ -178,9 +204,22 @@ def generar_pdf():
         c.drawString(38, 61, request.form.get('nombres_carga_3') or "")
         c.drawString(230, 61, request.form.get('dni_carga_3') or "")
         c.drawString(288, 61, format_fecha(request.form.get('nacimiento_carga_3')))
+
+        c.setFont("Helvetica", 7.5)
         c.drawString(365, 61, request.form.get('vinculo_carga_3') or "")
-        c.drawString(406, 61, request.form.get('instruccion_carga_3') or "")
-            
+
+        c.setFont("Helvetica", 6.9)
+
+        inst_3 = request.form.get('instruccion_carga_3') or ""
+        inst_3 = inst_3.strip().upper()
+        if inst_3 in ["SIN INSTRUCCION", "SIN INSTRUCCIÓN"]:
+            c.drawString(405, 69, "SIN")         
+            c.drawString(405, 61, "INSTRUCCIÓN") 
+        else:
+            c.drawString(405, 61, inst_3)
+
+        c.setFont("Helvetica", 9)
+
         disc_carga_3 = request.form.get('discapacidad_carga_3')
         if disc_carga_3 == 'Permanente':
             c.drawString(469, 65, "X")

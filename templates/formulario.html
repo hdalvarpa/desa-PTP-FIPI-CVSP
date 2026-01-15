@@ -22,11 +22,11 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Departamento</label>
-                    <input type="text" class="form-control" name="departamento">
+                    <input type="text" class="form-control" name="departamento" value="LA LIBERTAD">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Provincia</label>
-                    <input type="text" class="form-control" name="provincia">
+                    <input type="text" class="form-control" name="provincia" value="TRUJILLO">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Distrito</label>
@@ -154,7 +154,9 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="ingreso_mensual">Ingreso Mensual (S/.)</label>
                         <input type="number" step="0.01" class="form-control" name="ingreso_mensual"
-                            id="ingreso_mensual" placeholder="0.00">
+                            id="ingreso_mensual"
+                            onkeydown="return event.key != '+' && event.key != '-' && event.key != 'e' && event.key != 'E'"
+                            min="0">
                     </div>
                 </div>
             </div>
@@ -162,210 +164,239 @@
 
             <hr class="my-4">
 
-            <h5 class="mb-3 border-bottom pb-2 text-primary">3. Información General del Cónyuge/Conviviente</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                <h5 class="text-primary mb-0">3. Información General del Cónyuge/Conviviente</h5>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_nombres_conyuge">Nombre(s)</label>
-                    <input type="text" class="form-control" name="nombres_conyuge" id="id_nombres_conyuge">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_ap_paterno_conyuge">Apellido Paterno</label>
-                    <input type="text" class="form-control" name="ap_paterno_conyuge" id="id_ap_paterno_conyuge">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_ap_materno_conyuge">Apellido Materno</label>
-                    <input type="text" class="form-control" name="ap_materno_conyuge" id="id_ap_materno_conyuge">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="checkTieneConyuge">
+                    <label class="form-check-label fw-bold" for="checkTieneConyuge">¿Tiene Cónyuge?</label>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_dni_conyuge">N° DNI</label>
-                    <input type="text" class="form-control" name="dni_conyuge" id="id_dni_conyuge">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_nacimiento_conyuge">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" name="nacimiento_conyuge" id="id_nacimiento_conyuge">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_civil_conyuge">Estado Civil</label>
-                    <select class="form-select" name="estado_civil_conyuge" id="id_civil_conyuge">
-                        <option value="">Seleccione...</option>
-                        <option value="Soltero">Soltero(a)</option>
-                        <option value="Casado">Casado(a)</option>
-                        <option value="Conviviente">Conviviente</option>
-                        <option value="Viudo">Viudo(a)</option>
-                        <option value="Divorciado">Divorciado(a)</option>
-                    </select>
-                </div>
-            </div>
+            <div id="seccion_conyuge" style="display: none;">
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_instruccion_conyuge">Grado de Instrucción</label>
-                    <input type="text" class="form-control" name="grado_instruccion_conyuge"
-                        id="id_instruccion_conyuge">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label fw-bold" for="id_ocupacion_conyuge">Ocupación</label>
-                    <input type="text" class="form-control" name="ocupacion_conyuge" id="id_ocupacion_conyuge">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <span class="form-label fw-bold d-block">Discapacidad</span>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="discapacidad_conyuge" value="Permanente"
-                            id="disc_c_per">
-                        <label class="form-check-label" for="disc_c_per">Permanente</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="discapacidad_conyuge" value="Severa"
-                            id="disc_c_sev">
-                        <label class="form-check-label" for="disc_c_sev">Severa</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3 mb-3 rounded" style="background-color: #e3f2fd; border: 1px solid #90caf9;">
-                <h6 class="text-primary fw-bold mb-3"><i class="bi bi-cash-coin"></i> Información Económica</h6>
-
-                <div class="row align-items-center">
+                <div class="row">
                     <div class="col-md-4 mb-3">
-                        <span class="form-label fw-bold d-block">Situación Laboral</span>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sit_laboral_conyuge" value="Dependiente"
-                                id="sit_c_dep">
-                            <label class="form-check-label" for="sit_c_dep">Dependiente</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sit_laboral_conyuge"
-                                value="Independiente" id="sit_c_ind">
-                            <label class="form-check-label" for="sit_c_ind">Independiente</label>
-                        </div>
+                        <label class="form-label fw-bold" for="id_nombres_conyuge">Nombre(s)</label>
+                        <input type="text" class="form-control" name="nombres_conyuge" id="id_nombres_conyuge">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_ap_paterno_conyuge">Apellido Paterno</label>
+                        <input type="text" class="form-control" name="ap_paterno_conyuge" id="id_ap_paterno_conyuge">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_ap_materno_conyuge">Apellido Materno</label>
+                        <input type="text" class="form-control" name="ap_materno_conyuge" id="id_ap_materno_conyuge">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_dni_conyuge">N° DNI</label>
+                        <input type="text" class="form-control" name="dni_conyuge" id="id_dni_conyuge">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_nacimiento_conyuge">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" name="nacimiento_conyuge" id="id_nacimiento_conyuge">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_civil_conyuge">Estado Civil</label>
+                        <select class="form-select" name="estado_civil_conyuge" id="id_civil_conyuge">
+                            <option value="">Seleccione...</option>
+                            <option value="Soltero">Soltero(a)</option>
+                            <option value="Casado">Casado(a)</option>
+                            <option value="Conviviente">Conviviente</option>
+                            <option value="Viudo">Viudo(a)</option>
+                            <option value="Divorciado">Divorciado(a)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_instruccion_conyuge">Grado de Instrucción</label>
+                        <input type="text" class="form-control" name="grado_instruccion_conyuge"
+                            id="id_instruccion_conyuge">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold" for="id_ocupacion_conyuge">Ocupación</label>
+                        <input type="text" class="form-control" name="ocupacion_conyuge" id="id_ocupacion_conyuge">
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <span class="form-label fw-bold d-block">Condición</span>
+                        <span class="form-label fw-bold d-block">Discapacidad</span>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="condicion_conyuge" value="Formal"
-                                id="cond_c_for">
-                            <label class="form-check-label" for="cond_c_for">Formal</label>
+                            <input class="form-check-input" type="radio" name="discapacidad_conyuge" value="Permanente"
+                                id="disc_c_per">
+                            <label class="form-check-label" for="disc_c_per">Permanente</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="condicion_conyuge" value="Informal"
-                                id="cond_c_inf">
-                            <label class="form-check-label" for="cond_c_inf">Informal</label>
+                            <input class="form-check-input" type="radio" name="discapacidad_conyuge" value="Severa"
+                                id="disc_c_sev">
+                            <label class="form-check-label" for="disc_c_sev">Severa</label>
                         </div>
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold" for="id_ingreso_conyuge">Ingreso Mensual (S/.)</label>
-                        <input type="number" step="0.01" class="form-control" name="ingreso_mensual_conyuge"
-                            id="id_ingreso_conyuge" placeholder="0.00">
                     </div>
                 </div>
-            </div>
 
+                <div class="p-3 mb-3 rounded" style="background-color: #e3f2fd; border: 1px solid #90caf9;">
+                    <h6 class="text-primary fw-bold mb-3"><i class="bi bi-cash-coin"></i> Información Económica</h6>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-3">
+                            <span class="form-label fw-bold d-block">Situación Laboral</span>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="sit_laboral_conyuge"
+                                    value="Dependiente" id="sit_c_dep">
+                                <label class="form-check-label" for="sit_c_dep">Dependiente</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="sit_laboral_conyuge"
+                                    value="Independiente" id="sit_c_ind">
+                                <label class="form-check-label" for="sit_c_ind">Independiente</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <span class="form-label fw-bold d-block">Condición</span>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="condicion_conyuge" value="Formal"
+                                    id="cond_c_for">
+                                <label class="form-check-label" for="cond_c_for">Formal</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="condicion_conyuge" value="Informal"
+                                    id="cond_c_inf">
+                                <label class="form-check-label" for="cond_c_inf">Informal</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold" for="id_ingreso_conyuge">Ingreso Mensual (S/.)</label>
+                            <input type="number" step="0.01" class="form-control" name="ingreso_mensual_conyuge"
+                                id="id_ingreso_conyuge"
+                                onkeydown="return event.key != '+' && event.key != '-' && event.key != 'e' && event.key != 'E'"
+                                min="0">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
             <hr class="my-4">
 
-            <h5 class="mb-3 border-bottom pb-2 text-primary">4. Información General de la Carga Familiar</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                <h5 class="text-primary mb-0">4. Información General de la Carga Familiar</h5>
 
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle table-hover">
-                    <thead class="table-light text-center">
-                        <tr>
-                            <th style="width: 50px;">#</th>
-                            <th style="min-width: 200px;">Nombres y Apellidos</th>
-                            <th style="min-width: 100px;">N° DNI/CE</th>
-                            <th style="min-width: 140px;">Fecha de Nacimiento</th>
-                            <th style="min-width: 120px;">Vínculo</th>
-                            <th style="min-width: 150px;">Grado de Instrucción</th>
-                            <th style="min-width: 180px;">Discapacidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="fw-bold text-center bg-light">01</td>
-                            <td><input type="text" class="form-control form-control-sm" name="nombres_carga_1"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="dni_carga_1"></td>
-                            <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_1"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_1"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_1"></td>
-                            <td>
-                                <div class="d-flex flex-column gap-1">
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_1"
-                                            value="Permanente" id="disc_c1_per">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c1_per">Permanente</label>
-                                    </div>
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_1"
-                                            value="Severa" id="disc_c1_sev">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c1_sev">Severa</label>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="fw-bold text-center bg-light">02</td>
-                            <td><input type="text" class="form-control form-control-sm" name="nombres_carga_2"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="dni_carga_2"></td>
-                            <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_2"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_2"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_2"></td>
-                            <td>
-                                <div class="d-flex flex-column gap-1">
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_2"
-                                            value="Permanente" id="disc_c2_per">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c2_per">Permanente</label>
-                                    </div>
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_2"
-                                            value="Severa" id="disc_c2_sev">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c2_sev">Severa</label>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="fw-bold text-center bg-light">03</td>
-                            <td><input type="text" class="form-control form-control-sm" name="nombres_carga_3"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="dni_carga_3"></td>
-                            <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_3"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_3"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_3"></td>
-                            <td>
-                                <div class="d-flex flex-column gap-1">
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_3"
-                                            value="Permanente" id="disc_c3_per">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c3_per">Permanente</label>
-                                    </div>
-                                    <div class="form-check form-check-inline m-0">
-                                        <input class="form-check-input" type="radio" name="discapacidad_carga_3"
-                                            value="Severa" id="disc_c3_sev">
-                                        <label class="form-check-label" style="font-size: 0.8rem;"
-                                            for="disc_c3_sev">Severa</label>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="checkTieneCarga">
+                    <label class="form-check-label fw-bold" for="checkTieneCarga">¿Tiene Carga Familiar?</label>
+                </div>
             </div>
 
+            <div id="seccion_carga" style="display: none;">
+
+
+
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle table-hover">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th style="min-width: 200px;">Nombres y Apellidos</th>
+                                <th style="min-width: 100px;">N° DNI/CE</th>
+                                <th style="min-width: 140px;">Fecha de Nacimiento</th>
+                                <th style="min-width: 120px;">Vínculo</th>
+                                <th style="min-width: 150px;">Grado de Instrucción</th>
+                                <th style="min-width: 180px;">Discapacidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td class="fw-bold text-center bg-light">01</td>
+                                <td><input type="text" class="form-control form-control-sm" name="nombres_carga_1"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="dni_carga_1"></td>
+                                <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_1">
+                                </td>
+                                <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_1"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_1">
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_1"
+                                                value="Permanente" id="disc_c1_per">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c1_per">Permanente</label>
+                                        </div>
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_1"
+                                                value="Severa" id="disc_c1_sev">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c1_sev">Severa</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="fw-bold text-center bg-light">02</td>
+                                <td><input type="text" class="form-control form-control-sm" name="nombres_carga_2"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="dni_carga_2"></td>
+                                <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_2">
+                                </td>
+                                <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_2"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_2">
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_2"
+                                                value="Permanente" id="disc_c2_per">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c2_per">Permanente</label>
+                                        </div>
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_2"
+                                                value="Severa" id="disc_c2_sev">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c2_sev">Severa</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="fw-bold text-center bg-light">03</td>
+                                <td><input type="text" class="form-control form-control-sm" name="nombres_carga_3"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="dni_carga_3"></td>
+                                <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_3">
+                                </td>
+                                <td><input type="text" class="form-control form-control-sm" name="vinculo_carga_3"></td>
+                                <td><input type="text" class="form-control form-control-sm" name="instruccion_carga_3">
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_3"
+                                                value="Permanente" id="disc_c3_per">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c3_per">Permanente</label>
+                                        </div>
+                                        <div class="form-check form-check-inline m-0">
+                                            <input class="form-check-input" type="radio" name="discapacidad_carga_3"
+                                                value="Severa" id="disc_c3_sev">
+                                            <label class="form-check-label" style="font-size: 0.8rem;"
+                                                for="disc_c3_sev">Severa</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <hr class="my-4">
 
@@ -384,10 +415,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <tr>
                             <td class="fw-bold text-center bg-light p-2">01</td>
-                            
+
                             <td class="p-2">
                                 <input type="text" class="form-control form-control-sm" name="nombres_adic_1">
                             </td>
@@ -424,13 +455,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <tr>
                             <td class="p-2">
-                                <input type="email" class="form-control" name="correo_contacto" placeholder="ejemplo@correo.com">
+                                <input type="email" class="form-control" name="correo_contacto"
+                                    placeholder="ejemplo@correo.com">
                             </td>
                             <td class="p-2">
-                                <input type="text" class="form-control" name="telefono_contacto" placeholder="999 999 999">
+                                <input type="text" class="form-control" name="telefono_contacto"
+                                    placeholder="999 999 999">
                             </td>
                         </tr>
 
@@ -449,5 +482,76 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkConyuge = document.getElementById('checkTieneConyuge');
+        const seccionConyuge = document.getElementById('seccion_conyuge');
+
+        // Buscamos TODOS los inputs, selects y radios dentro de la sección
+        const inputsConyuge = seccionConyuge.querySelectorAll('input, select');
+
+        // Función que hace la magia
+        function toggleConyuge() {
+            if (checkConyuge.checked) {
+                // SI ESTÁ MARCADO:
+                seccionConyuge.style.display = 'block'; // Mostramos la sección
+
+                // Activamos todos los campos y los hacemos requeridos si es necesario
+                inputsConyuge.forEach(input => {
+                    input.disabled = false;
+                });
+
+            } else {
+                // SI ESTÁ DESMARCADO:
+                seccionConyuge.style.display = 'none'; // Ocultamos la sección
+
+                inputsConyuge.forEach(input => {
+                    input.disabled = true; // Desactivamos (para que no se envíen al servidor)
+                    input.value = '';      // LIMPIAMOS el texto escrito
+                    input.checked = false; // Desmarcamos radios/checkboxes
+                });
+            }
+        }
+
+        // 1. Ejecutar al cargar la página (para asegurar el estado inicial)
+        toggleConyuge();
+
+        // 2. Ejecutar cada vez que se toque el interruptor
+        checkConyuge.addEventListener('change', toggleConyuge);
+
+
+        // ==========================================
+        // 2. LÓGICA DE CARGA FAMILIAR (¡NUEVO!)
+        // ==========================================
+        const checkCarga = document.getElementById('checkTieneCarga');
+        const seccionCarga = document.getElementById('seccion_carga');
+        // Buscamos todos los inputs dentro de la tabla de carga
+        const inputsCarga = seccionCarga.querySelectorAll('input, select');
+
+        function toggleCarga() {
+            if (checkCarga.checked) {
+                // MOSTRAR: Quitamos el display none y habilitamos inputs
+                seccionCarga.style.display = 'block';
+                inputsCarga.forEach(input => input.disabled = false);
+            } else {
+                // OCULTAR: Ponemos display none, deshabilitamos y LIMPIAMOS
+                seccionCarga.style.display = 'none';
+                inputsCarga.forEach(input => {
+                    input.disabled = true;  // Para que Python no reciba basura
+                    input.value = '';       // Borramos texto
+                    input.checked = false;  // Desmarcamos radios
+                });
+            }
+        }
+
+        // Ejecutar al inicio (por si recargas la página)
+        toggleCarga();
+
+        // Ejecutar cuando haces clic en el switch
+        checkCarga.addEventListener('change', toggleCarga);
+
+    });
+</script>
 
 {% endblock %}
