@@ -65,8 +65,10 @@ def generar_pdf():
         packet = io.BytesIO()
         c = canvas.Canvas(packet, pagesize=A4)
 
+        fonttype_default = "Helvetica"
+        sizefont_default = 10
 
-        c.setFont("Helvetica", 9)
+        c.setFont(fonttype_default, sizefont_default)
         # ==========================================
         #  PÁGINA 1: Secciones 1, 2, 3 y 4
         # ==========================================
@@ -175,7 +177,7 @@ def generar_pdf():
         else:
             c.drawString(405, 117, inst_1)
         
-        c.setFont("Helvetica", 9)
+        c.setFont(fonttype_default, sizefont_default)
 
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
@@ -201,7 +203,7 @@ def generar_pdf():
         else:
             c.drawString(405, 88, inst_2)
         
-        c.setFont("Helvetica", 9)
+        c.setFont(fonttype_default, sizefont_default)
 
             
         disc_carga_2 = request.form.get('discapacidad_carga_2')
@@ -228,7 +230,7 @@ def generar_pdf():
         else:
             c.drawString(405, 61, inst_3)
 
-        c.setFont("Helvetica", 9)
+        c.setFont(fonttype_default, sizefont_default)
 
         disc_carga_3 = request.form.get('discapacidad_carga_3')
         if disc_carga_3 == 'Permanente':
@@ -241,7 +243,7 @@ def generar_pdf():
         # ==========================================
         c.showPage() 
 
-        c.setFont("Helvetica", 9)
+        c.setFont(fonttype_default, sizefont_default)
         # A partir de aquí, las coordenadas (0,0) son de la PÁGINA 2
         
         # ==========================================

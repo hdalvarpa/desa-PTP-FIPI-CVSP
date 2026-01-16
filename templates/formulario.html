@@ -15,7 +15,8 @@
             <div class="row">
                 <div class="col-12 mb-3">
                     <label class="form-label fw-bold">Dirección</label>
-                    <input type="text" class="form-control" name="direccion" placeholder="Dirección completa">
+                    <input type="text" class="form-control" name="direccion"
+                        oninput="this.value = this.value.toUpperCase()">
                 </div>
             </div>
 
@@ -88,11 +89,11 @@
                     <label class="form-label fw-bold">Estado Civil</label>
                     <select class="form-select" name="estado_civil_jefe">
                         <option value="">Seleccione...</option>
-                        <option value="Soltero">Soltero(a)</option>
-                        <option value="Casado">Casado(a)</option>
-                        <option value="Conviviente">Conviviente</option>
-                        <option value="Viudo">Viudo(a)</option>
-                        <option value="Divorciado">Divorciado(a)</option>
+                        <option value="SOLTERO">SOLTERO(A)</option>
+                        <option value="CASADO">CASADO(A)</option>
+                        <option value="CONVIVIENTE">CONVIVIENTE</option>
+                        <option value="VIUDO">VIUDO(A)</option>
+                        <option value="DIVORCIADO">DIVORCIADO(A)</option>
                     </select>
                 </div>
             </div>
@@ -484,8 +485,8 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        
+    document.addEventListener('DOMContentLoaded', function () {
+
         // ==========================================
         // 1. LÓGICA DEL CÓNYUGE (Corregida)
         // ==========================================
@@ -503,7 +504,7 @@
                 seccionConyuge.style.display = 'none';
                 inputsConyuge.forEach(input => {
                     input.disabled = true;
-                    
+
                     // --- CORRECCIÓN AQUÍ ---
                     if (input.type === 'radio' || input.type === 'checkbox') {
                         input.checked = false; // Solo desmarcar, NO borrar value
@@ -514,7 +515,7 @@
                 });
             }
         }
-        
+
         // Ejecutar al inicio y al cambiar
         toggleConyuge();
         checkConyuge.addEventListener('change', toggleConyuge);
@@ -538,9 +539,9 @@
 
                     // --- CORRECCIÓN AQUÍ TAMBIÉN ---
                     if (input.type === 'radio' || input.type === 'checkbox') {
-                        input.checked = false; 
+                        input.checked = false;
                     } else {
-                        input.value = '';      
+                        input.value = '';
                     }
                     // -------------------------------
                 });
