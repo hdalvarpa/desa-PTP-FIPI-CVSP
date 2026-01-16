@@ -47,10 +47,20 @@ def formulario():
 # 4. RUTA GENERAR PDF (La lógica pesada)
 @app.route('/generar', methods=['POST'])
 def generar_pdf():
+
+# --- AGREGA ESTO AQUÍ ---
+    #print("\n" + "="*30)
+    #print("--- DATOS RECIBIDOS DEL FORMULARIO ---")
+    #print(request.form)  # <--- ESTO ES EL CHISMOSO
+    #print("="*30 + "\n")
+    # ------------------------
+
+
     if not os.path.exists(NOMBRE_PLANTILLA):
         return "Error: No encuentro la plantilla (asegúrate que el nombre coincida).", 404
 
     try:
+        #packet = io.BytesIO()
         # 1. CREAMOS EL LIENZO (CANVAS)
         packet = io.BytesIO()
         c = canvas.Canvas(packet, pagesize=A4)
@@ -83,9 +93,9 @@ def generar_pdf():
         # --- RADIO BUTTONS: SITUACIÓN LABORAL JEFE ---
         sit_jefe = request.form.get('sit_laboral')
         if sit_jefe == 'Dependiente':
-            c.drawString(429, 364, "X")
+            c.drawString(429.8, 365, "X")
         elif sit_jefe == 'Independiente':
-            c.drawString(507, 364, "X")
+            c.drawString(508, 365, "X")
 
         c.drawString(18, 336, request.form.get('dni_jefe') or "")        
         # FECHA FORMATEADA
@@ -95,18 +105,18 @@ def generar_pdf():
         # --- RADIO BUTTONS: CONDICIÓN JEFE ---
         cond_jefe = request.form.get('condicion_eco')
         if cond_jefe == 'Formal':
-            c.drawString(429, 336, "X")
+            c.drawString(429.8, 337, "X")
         elif cond_jefe == 'Informal':
-            c.drawString(507, 336, "X")
+            c.drawString(508, 337, "X")
 
         c.drawString(18, 310, request.form.get('grado_instruccion') or "")
         c.drawString(155, 310, request.form.get('ocupacion') or "")
         # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
         disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
         if disc_jefe == 'Permanente':
-            c.drawString(300, 308, "X") # Coordenada casilla Permanente
+            c.drawString(300.6, 309, "X")
         elif disc_jefe == 'Severa':
-            c.drawString(368, 308, "X") # Coordenada casilla Severa
+            c.drawString(368.6, 309, "X") 
         c.drawString(419, 310, request.form.get('ingreso_mensual') or "")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
@@ -116,9 +126,9 @@ def generar_pdf():
         # --- RADIO BUTTONS: SITUACIÓN LABORAL CÓNYUGE ---
         sit_conyuge = request.form.get('sit_laboral_conyuge')
         if sit_conyuge == 'Dependiente':
-            c.drawString(429, 243, "X")
+            c.drawString(429.8, 244, "X")
         elif sit_conyuge == 'Independiente':
-            c.drawString(507, 243, "X")
+            c.drawString(508, 244, "X")
 
         c.drawString(18, 215, request.form.get('dni_conyuge') or "")
         # Usamos la función format_fecha para que salga DD/MM/YYYY
@@ -130,18 +140,18 @@ def generar_pdf():
         # --- RADIO BUTTONS: CONDICIÓN ECONÓMICA CÓNYUGE ---
         cond_conyuge = request.form.get('condicion_conyuge')
         if cond_conyuge == 'Formal':
-            c.drawString(429, 215, "X")
+            c.drawString(429.8, 216, "X")
         elif cond_conyuge == 'Informal':
-            c.drawString(507, 215, "X")
+            c.drawString(508, 216, "X")
         
         # Fila 3: Instrucción y Ocupación
         c.drawString(18, 187, request.form.get('grado_instruccion_conyuge') or "")
         c.drawString(155, 187, request.form.get('ocupacion_conyuge') or "")
         disc_conyuge = request.form.get('discapacidad_conyuge')
         if disc_conyuge == 'Permanente':
-            c.drawString(300, 187, "X")
+            c.drawString(300.6, 188, "X")
         elif disc_conyuge == 'Severa':
-            c.drawString(368, 187, "X")
+            c.drawString(368.6, 188, "X")
         # Ingreso Mensual
         c.drawString(419, 187, request.form.get('ingreso_mensual_conyuge') or "")
 
@@ -169,9 +179,9 @@ def generar_pdf():
 
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
-            c.drawString(469, 120, "X")
+            c.drawString(469.8, 121, "X")
         elif disc_carga_1 == 'Severa':
-            c.drawString(537, 120, "X")
+            c.drawString(538, 121, "X")
         
         # Fila 2
         c.drawString(38, 88, request.form.get('nombres_carga_2') or "")
@@ -196,9 +206,9 @@ def generar_pdf():
             
         disc_carga_2 = request.form.get('discapacidad_carga_2')
         if disc_carga_2 == 'Permanente':
-            c.drawString(469, 94, "X")
+            c.drawString(469.8, 95.5, "X")
         elif disc_carga_2 == 'Severa':
-            c.drawString(537, 94, "X")
+            c.drawString(538, 95.5, "X")
 
         # Fila 3
         c.drawString(38, 61, request.form.get('nombres_carga_3') or "")
@@ -222,9 +232,9 @@ def generar_pdf():
 
         disc_carga_3 = request.form.get('discapacidad_carga_3')
         if disc_carga_3 == 'Permanente':
-            c.drawString(469, 65, "X")
+            c.drawString(469.8, 66.5, "X")
         elif disc_carga_3 == 'Severa':
-            c.drawString(537, 65, "X")
+            c.drawString(538, 66.5, "X")
 
         # ==========================================
         #  CAMBIO DE PÁGINA (Aquí ocurre la magia)

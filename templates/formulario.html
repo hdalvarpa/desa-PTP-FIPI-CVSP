@@ -484,71 +484,70 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // ==========================================
+        // 1. LÓGICA DEL CÓNYUGE (Corregida)
+        // ==========================================
         const checkConyuge = document.getElementById('checkTieneConyuge');
         const seccionConyuge = document.getElementById('seccion_conyuge');
-
-        // Buscamos TODOS los inputs, selects y radios dentro de la sección
         const inputsConyuge = seccionConyuge.querySelectorAll('input, select');
 
-        // Función que hace la magia
         function toggleConyuge() {
             if (checkConyuge.checked) {
-                // SI ESTÁ MARCADO:
-                seccionConyuge.style.display = 'block'; // Mostramos la sección
-
-                // Activamos todos los campos y los hacemos requeridos si es necesario
-                inputsConyuge.forEach(input => {
-                    input.disabled = false;
-                });
-
+                // MOSTRAR
+                seccionConyuge.style.display = 'block';
+                inputsConyuge.forEach(input => input.disabled = false);
             } else {
-                // SI ESTÁ DESMARCADO:
-                seccionConyuge.style.display = 'none'; // Ocultamos la sección
-
+                // OCULTAR
+                seccionConyuge.style.display = 'none';
                 inputsConyuge.forEach(input => {
-                    input.disabled = true; // Desactivamos (para que no se envíen al servidor)
-                    input.value = '';      // LIMPIAMOS el texto escrito
-                    input.checked = false; // Desmarcamos radios/checkboxes
+                    input.disabled = true;
+                    
+                    // --- CORRECCIÓN AQUÍ ---
+                    if (input.type === 'radio' || input.type === 'checkbox') {
+                        input.checked = false; // Solo desmarcar, NO borrar value
+                    } else {
+                        input.value = '';      // Borrar texto solo si no es radio/check
+                    }
+                    // -----------------------
                 });
             }
         }
-
-        // 1. Ejecutar al cargar la página (para asegurar el estado inicial)
+        
+        // Ejecutar al inicio y al cambiar
         toggleConyuge();
-
-        // 2. Ejecutar cada vez que se toque el interruptor
         checkConyuge.addEventListener('change', toggleConyuge);
 
 
         // ==========================================
-        // 2. LÓGICA DE CARGA FAMILIAR (¡NUEVO!)
+        // 2. LÓGICA DE CARGA FAMILIAR (Corregida)
         // ==========================================
         const checkCarga = document.getElementById('checkTieneCarga');
         const seccionCarga = document.getElementById('seccion_carga');
-        // Buscamos todos los inputs dentro de la tabla de carga
         const inputsCarga = seccionCarga.querySelectorAll('input, select');
 
         function toggleCarga() {
             if (checkCarga.checked) {
-                // MOSTRAR: Quitamos el display none y habilitamos inputs
                 seccionCarga.style.display = 'block';
                 inputsCarga.forEach(input => input.disabled = false);
             } else {
-                // OCULTAR: Ponemos display none, deshabilitamos y LIMPIAMOS
                 seccionCarga.style.display = 'none';
                 inputsCarga.forEach(input => {
-                    input.disabled = true;  // Para que Python no reciba basura
-                    input.value = '';       // Borramos texto
-                    input.checked = false;  // Desmarcamos radios
+                    input.disabled = true;
+
+                    // --- CORRECCIÓN AQUÍ TAMBIÉN ---
+                    if (input.type === 'radio' || input.type === 'checkbox') {
+                        input.checked = false; 
+                    } else {
+                        input.value = '';      
+                    }
+                    // -------------------------------
                 });
             }
         }
 
-        // Ejecutar al inicio (por si recargas la página)
         toggleCarga();
-
-        // Ejecutar cuando haces clic en el switch
         checkCarga.addEventListener('change', toggleCarga);
 
     });
