@@ -93,11 +93,14 @@ def generar_pdf():
         c.drawString(155, 364, request.form.get('ap_paterno_jefe') or "")
         c.drawString(290, 364, request.form.get('ap_materno_jefe') or "")
         # --- RADIO BUTTONS: SITUACIÓN LABORAL JEFE ---
+
+        c.setFont("Helvetica", 9)
         sit_jefe = request.form.get('sit_laboral')
         if sit_jefe == 'Dependiente':
             c.drawString(429.8, 365, "X")
         elif sit_jefe == 'Independiente':
             c.drawString(508, 365, "X")
+        c.setFont(fonttype_default, sizefont_default)
 
         c.drawString(18, 336, request.form.get('dni_jefe') or "")        
         # FECHA FORMATEADA
@@ -105,20 +108,25 @@ def generar_pdf():
         c.drawString(155, 336, fecha_nac_jefe)
         c.drawString(290, 336, request.form.get('estado_civil_jefe') or "") # Select devuelve texto
         # --- RADIO BUTTONS: CONDICIÓN JEFE ---
+        c.setFont("Helvetica", 9)
         cond_jefe = request.form.get('condicion_eco')
         if cond_jefe == 'Formal':
             c.drawString(429.8, 337, "X")
         elif cond_jefe == 'Informal':
             c.drawString(508, 337, "X")
+        c.setFont(fonttype_default, sizefont_default)
 
         c.drawString(18, 310, request.form.get('grado_instruccion') or "")
         c.drawString(155, 310, request.form.get('ocupacion') or "")
         # --- RADIO BUTTONS: DISCAPACIDAD JEFE (Aquí está la lógica de la X) ---
+        c.setFont("Helvetica", 9)
         disc_jefe = request.form.get('discapacidad') # Valores: 'Permanente' o 'Severa'
         if disc_jefe == 'Permanente':
             c.drawString(300.6, 309, "X")
         elif disc_jefe == 'Severa':
             c.drawString(368.6, 309, "X") 
+        c.setFont(fonttype_default, sizefont_default)
+
         c.drawString(419, 310, request.form.get('ingreso_mensual') or "")
 
         # --- 3. CÓNYUGE (Misma lógica) ---
@@ -126,11 +134,13 @@ def generar_pdf():
         c.drawString(155, 243, request.form.get('ap_paterno_conyuge') or "")
         c.drawString(290, 243, request.form.get('ap_materno_conyuge') or "")
         # --- RADIO BUTTONS: SITUACIÓN LABORAL CÓNYUGE ---
+        c.setFont("Helvetica", 9)
         sit_conyuge = request.form.get('sit_laboral_conyuge')
         if sit_conyuge == 'Dependiente':
             c.drawString(429.8, 244, "X")
         elif sit_conyuge == 'Independiente':
             c.drawString(508, 244, "X")
+        c.setFont(fonttype_default, sizefont_default)
 
         c.drawString(18, 215, request.form.get('dni_conyuge') or "")
         # Usamos la función format_fecha para que salga DD/MM/YYYY
@@ -140,20 +150,27 @@ def generar_pdf():
         # ... Agrega los demás campos de texto del cónyuge aquí con sus coordenadas ...
         # Radios Cónyuge
         # --- RADIO BUTTONS: CONDICIÓN ECONÓMICA CÓNYUGE ---
+        c.setFont("Helvetica", 9)
         cond_conyuge = request.form.get('condicion_conyuge')
         if cond_conyuge == 'Formal':
             c.drawString(429.8, 216, "X")
         elif cond_conyuge == 'Informal':
             c.drawString(508, 216, "X")
+        c.setFont(fonttype_default, sizefont_default)
         
         # Fila 3: Instrucción y Ocupación
         c.drawString(18, 187, request.form.get('grado_instruccion_conyuge') or "")
         c.drawString(155, 187, request.form.get('ocupacion_conyuge') or "")
+
+        # Discapacidad Cónyuge
+        c.setFont("Helvetica", 9)
         disc_conyuge = request.form.get('discapacidad_conyuge')
         if disc_conyuge == 'Permanente':
             c.drawString(300.6, 188, "X")
         elif disc_conyuge == 'Severa':
             c.drawString(368.6, 188, "X")
+        c.setFont(fonttype_default, sizefont_default)
+
         # Ingreso Mensual
         c.drawString(419, 187, request.form.get('ingreso_mensual_conyuge') or "")
 
@@ -179,11 +196,13 @@ def generar_pdf():
         
         c.setFont(fonttype_default, sizefont_default)
 
+        c.setFont("Helvetica", 9)
         disc_carga_1 = request.form.get('discapacidad_carga_1')
         if disc_carga_1 == 'Permanente':
             c.drawString(469.8, 121, "X")
         elif disc_carga_1 == 'Severa':
             c.drawString(538, 121, "X")
+        c.setFont(fonttype_default, sizefont_default)
         
         # Fila 2
         c.drawString(38, 88, request.form.get('nombres_carga_2') or "")
@@ -205,12 +224,13 @@ def generar_pdf():
         
         c.setFont(fonttype_default, sizefont_default)
 
-            
+        c.setFont("Helvetica", 9)
         disc_carga_2 = request.form.get('discapacidad_carga_2')
         if disc_carga_2 == 'Permanente':
             c.drawString(469.8, 95.5, "X")
         elif disc_carga_2 == 'Severa':
             c.drawString(538, 95.5, "X")
+        c.setFont(fonttype_default, sizefont_default)
 
         # Fila 3
         c.drawString(38, 61, request.form.get('nombres_carga_3') or "")
@@ -232,11 +252,13 @@ def generar_pdf():
 
         c.setFont(fonttype_default, sizefont_default)
 
+        c.setFont("Helvetica", 9)
         disc_carga_3 = request.form.get('discapacidad_carga_3')
         if disc_carga_3 == 'Permanente':
             c.drawString(469.8, 66.5, "X")
         elif disc_carga_3 == 'Severa':
             c.drawString(538, 66.5, "X")
+        c.setFont(fonttype_default, sizefont_default)
 
         # ==========================================
         #  CAMBIO DE PÁGINA (Aquí ocurre la magia)
@@ -258,8 +280,8 @@ def generar_pdf():
         c.drawString(377, 784, request.form.get('dni_adic_1') or "")
         c.drawString(477, 784, request.form.get('vinculo_adic_1') or "")
         # --- 6. CONTACTO ---
-        c.drawString(18, 694, request.form.get('correo_contacto') or "")
-        c.drawString(305, 694, request.form.get('telefono_contacto') or "")
+        c.drawString(60, 694, request.form.get('correo_contacto') or "")
+        c.drawString(400, 694, request.form.get('telefono_contacto') or "")
 
         # FINALIZAR
         c.save()
