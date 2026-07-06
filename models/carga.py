@@ -1,10 +1,10 @@
 from models.database import db
 
-class FichaCarga(db.Model):
-    __tablename__ = 'fichas_cargas'
+class Carga(db.Model):
+    __tablename__ = 'carga'
 
     id_carga = db.Column(db.Integer, primary_key=True)
-    id_ficha = db.Column(db.Integer, db.ForeignKey('fichas_inscripcion.id_ficha', ondelete='CASCADE'), nullable=False)
+    id_beneficiario_jefe = db.Column(db.Integer, db.ForeignKey('beneficiario_jefe.id_beneficiario_jefe', ondelete='CASCADE'), nullable=False)
 
     nombres = db.Column(db.String(150))
     dni = db.Column(db.String(20))
@@ -14,4 +14,4 @@ class FichaCarga(db.Model):
     discapacidad = db.Column(db.String(50))
 
     def __repr__(self):
-        return f'<FichaCarga {self.dni}>'
+        return f'<Carga {self.dni}>'

@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Matriz General</h2>
+    <h2>Beneficiarios</h2>
     <a href="/matriz/nuevo" class="btn btn-primary">
-        ➕ Crear Matriz
+        ➕ Crear Beneficiario
     </a>
 </div>
 
@@ -38,22 +38,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for ficha in fichas %}
+                    {% for b in beneficiarios %}
                     <tr>
-                        <td>{{ ficha.id_ficha }}</td>
+                        <td>{{ b.id_beneficiario_jefe }}</td>
                         <td>
-                            {% if ficha.entidad_tecnica %}
-                                <strong>{{ ficha.entidad_tecnica.razon_social }}</strong>
+                            {% if b.proyecto %}
+                                <strong>{{ b.proyecto.entidades_tecnicas[0].razon_social if b.proyecto and b.proyecto.entidades_tecnicas else "N/A" }}</strong>
                             {% else %}
                                 <span class="text-muted">N/A</span>
                             {% endif %}
                         </td>
-                        <td>{{ ficha.jefe.nombres if ficha.jefe else '' }} {{ ficha.jefe.ap_paterno if ficha.jefe else '' }} {{ ficha.jefe.ap_materno if ficha.jefe else '' }}</td>
-                        <td>{{ ficha.jefe.dni if ficha.jefe else '' }}</td>
-                        <td>{{ ficha.predio.distrito if ficha.predio else '' }}</td>
-                        <td>{{ ficha.fecha_registro.strftime('%d/%m/%Y %H:%M') if ficha.fecha_registro else '' }}</td>
+                        <td>{{ b.nombres if ficha.jefe else '' }} {{ b.ap_paterno if ficha.jefe else '' }} {{ b.ap_materno if ficha.jefe else '' }}</td>
+                        <td>{{ b.dni if ficha.jefe else '' }}</td>
+                        <td>{{ b.predio.distrito if b.predio else '' }}</td>
+                        <td>{{ b.fecha_registro.strftime('%d/%m/%Y %H:%M') if b.fecha_registro else '' }}</td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-success me-1" data-bs-toggle="modal" data-bs-target="#modalVer-{{ ficha.id_ficha }}" title="Ver Detalles">
+                            <button class="btn btn-sm btn-outline-success me-1" data-bs-toggle="modal" data-bs-target="#modalVer-{{ b.id_beneficiario_jefe }}" title="Ver Detalles">
                                 👁 Ver
                             </button>
                             
@@ -63,23 +63,23 @@
                               </button>
                               <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="font-size:0.85rem;">
                                 <li>
-                                    <form action="/generar/{{ ficha.id_ficha }}" method="POST" class="d-inline m-0 p-0">
+                                    <form action="/generar/{{ b.id_beneficiario_jefe }}" method="POST" class="d-inline m-0 p-0">
                                         <button type="submit" class="dropdown-item text-danger fw-bold bg-transparent border-0 w-100 text-start">
                                             <i class="fas fa-file-pdf me-2"></i>1. Ficha de Inscripción
                                         </button>
                                     </form>
                                 </li>
-                                <li><a class="dropdown-item text-info fw-bold" href="#" onclick="abrirModalActas({{ ficha.id_ficha }}, 'constatacion')"><i class="fas fa-file-word me-2"></i>2. Formato de Constatación</a></li>
-                                <li><a class="dropdown-item text-primary fw-bold" href="/descargar_informe/{{ ficha.id_ficha }}"><i class="fas fa-file-word me-2"></i>3. Informe Técnico</a></li>
+                                <li><a class="dropdown-item text-info fw-bold" href="#" onclick="abrirModalActas({{ b.id_beneficiario_jefe }}, 'constatacion')"><i class="fas fa-file-word me-2"></i>2. Formato de Constatación</a></li>
+                                <li><a class="dropdown-item text-primary fw-bold" href="/descargar_informe/{{ b.id_beneficiario_jefe }}"><i class="fas fa-file-word me-2"></i>3. Informe Técnico</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-success fw-bold" href="#" onclick="abrirModalActas({{ ficha.id_ficha }}, 'zip')"><i class="fas fa-file-archive me-2"></i>Descargar Todos (ZIP)</a></li>
+                                <li><a class="dropdown-item text-success fw-bold" href="#" onclick="abrirModalActas({{ b.id_beneficiario_jefe }}, 'zip')"><i class="fas fa-file-archive me-2"></i>Descargar Todos (ZIP)</a></li>
                               </ul>
                             </div>
                             
-                            <a href="/matriz/editar/{{ ficha.id_ficha }}" class="btn btn-sm btn-outline-warning me-1" title="Editar Ficha">
+                            <a href="/matriz/editar/{{ b.id_beneficiario_jefe }}" class="btn btn-sm btn-outline-warning me-1" title="Editar Ficha">
                                 ✏️ Editar
                             </a>
-                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar-{{ ficha.id_ficha }}">
+                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar-{{ b.id_beneficiario_jefe }}">
                                 🗑️ Eliminar
                             </button></td>
                     </tr>
@@ -95,18 +95,18 @@
     </div>
 </div>
 
-{% for ficha in fichas %}
+{% for b in beneficiarios %}
 <!-- Modal Eliminar -->
-<div class="modal fade" id="modalEliminar-{{ ficha.id_ficha }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalEliminar-{{ b.id_beneficiario_jefe }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="/matriz/eliminar/{{ ficha.id_ficha }}" method="POST">
+        <form action="/matriz/eliminar/{{ b.id_beneficiario_jefe }}" method="POST">
             <div class="modal-content text-dark">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger">⚠️ Confirmar Eliminación</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-start">
-                    <p>¿Estás seguro de que deseas eliminar la ficha de <strong>{{ ficha.jefe.nombres if ficha.jefe else 'esta persona' }} {{ ficha.jefe.ap_paterno if ficha.jefe else '' }}</strong> (DNI: {{ ficha.jefe.dni if ficha.jefe else 'N/A' }})?</p>
+                    <p>¿Estás seguro de que deseas eliminar la ficha de <strong>{{ b.nombres if ficha.jefe else 'esta persona' }} {{ b.ap_paterno if ficha.jefe else '' }}</strong> (DNI: {{ b.dni if ficha.jefe else 'N/A' }})?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -118,11 +118,11 @@
 </div>
 
 <!-- Modal Ver -->
-<div class="modal fade" id="modalVer-{{ ficha.id_ficha }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalVer-{{ b.id_beneficiario_jefe }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content text-light">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">👁 Detalles de Ficha N° {{ ficha.id_ficha }}</h5>
+                <h5 class="modal-title">👁 Detalles de Ficha N° {{ b.id_beneficiario_jefe }}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-start" style="color: #f1f5f9; max-height: 75vh; overflow-y: auto; padding-right: 15px;">
@@ -134,7 +134,7 @@
                         <h6 class="fw-bold mb-3 border-bottom border-secondary pb-2" style="color: #10b981;"><i class="bi bi-building"></i> Entidad Técnica</h6>
                         <div class="p-3 rounded-4 shadow-sm" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);">
                             <div class="small text-success opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Razón Social</div>
-                            <div class="fw-semibold text-white fs-6">{{ ficha.entidad_tecnica.razon_social if ficha.entidad_tecnica else 'N/A' }}</div>
+                            <div class="fw-semibold text-white fs-6">{{ b.proyecto.entidades_tecnicas[0].razon_social if b.proyecto and b.proyecto.entidades_tecnicas else "N/A" if b.proyecto else 'N/A' }}</div>
                         </div>
                     </div>
                     
@@ -145,33 +145,33 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-12">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Dirección / Referencia</div>
-                                    <div class="fw-semibold text-white fs-6">{{ ficha.predio.direccion if ficha.predio else '-' }} <span class="text-light opacity-75 fw-normal ms-1">({{ ficha.predio.referencia if ficha.predio else 'Sin referencia' }})</span></div>
+                                    <div class="fw-semibold text-white fs-6">{{ b.predio.direccion if b.predio else '-' }} <span class="text-light opacity-75 fw-normal ms-1">({{ b.predio.referencia if b.predio else 'Sin referencia' }})</span></div>
                                 </div>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Dpto</div>
-                                    <div class="fw-medium text-white">{{ ficha.predio.departamento if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.predio.departamento if b.predio else '-' }}</div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Provincia</div>
-                                    <div class="fw-medium text-white">{{ ficha.predio.provincia if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.predio.provincia if b.predio else '-' }}</div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Distrito</div>
-                                    <div class="fw-medium text-white text-truncate" title="{{ ficha.predio.distrito if ficha.predio else '' }}">{{ ficha.predio.distrito if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white text-truncate" title="{{ b.predio.distrito if b.predio else '' }}">{{ b.predio.distrito if b.predio else '-' }}</div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Mz</div>
-                                    <div class="fw-medium text-white">{{ ficha.predio.manzana if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.predio.manzana if b.predio else '-' }}</div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Lote</div>
-                                    <div class="fw-medium text-white">{{ ficha.predio.lote if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.predio.lote if b.predio else '-' }}</div>
                                 </div>
                                 <div class="col-md-2 col-4">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Sub Lote</div>
-                                    <div class="fw-medium text-white">{{ ficha.predio.sublote if ficha.predio else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.predio.sublote if b.predio else '-' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -183,50 +183,50 @@
                         <div class="p-3 rounded-4 shadow-sm" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.1);">
                             
                             <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Nombre Completo</div>
-                            <div class="fw-semibold fs-5 mb-3 text-white">{{ ficha.jefe.nombres if ficha.jefe else '' }} {{ ficha.jefe.ap_paterno if ficha.jefe else '' }} {{ ficha.jefe.ap_materno if ficha.jefe else '' }}</div>
+                            <div class="fw-semibold fs-5 mb-3 text-white">{{ b.nombres if ficha.jefe else '' }} {{ b.ap_paterno if ficha.jefe else '' }} {{ b.ap_materno if ficha.jefe else '' }}</div>
                             
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">N° DNI</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.dni if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.dni if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Nacimiento</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.nacimiento if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.nacimiento if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Estado Civil</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.estado_civil if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.estado_civil if ficha.jefe else '-' }}</div>
                                 </div>
                             </div>
                             
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Instrucción</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.grado_instruccion if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.grado_instruccion if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Ocupación</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.ocupacion if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.ocupacion if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Ingreso (S/.)</div>
-                                    <div class="fw-bold text-success">{{ ficha.jefe.ingreso_mensual if ficha.jefe else '0' }}</div>
+                                    <div class="fw-bold text-success">{{ b.ingreso_mensual if ficha.jefe else '0' }}</div>
                                 </div>
                             </div>
                             
                             <div class="row g-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Situación Laboral</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.sit_laboral if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.sit_laboral if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Condición Econ.</div>
-                                    <div class="fw-medium text-white">{{ ficha.jefe.condicion_eco if ficha.jefe else '-' }}</div>
+                                    <div class="fw-medium text-white">{{ b.condicion_eco if ficha.jefe else '-' }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-warning opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Discapacidad</div>
-                                    <div class="fw-medium text-danger">{{ ficha.jefe.discapacidad if ficha.jefe else 'Ninguna' }}</div>
+                                    <div class="fw-medium text-danger">{{ b.discapacidad if ficha.jefe else 'Ninguna' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -236,53 +236,53 @@
                     <div class="col-12">
                         <h6 class="fw-bold mb-3 border-bottom border-secondary pb-2" style="color: #f43f5e;"><i class="bi bi-person-heart"></i> Cónyuge</h6>
                         <div class="p-3 rounded-4 shadow-sm" style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.1);">
-                            {% if ficha.conyuge and ficha.conyuge.nombres %}
+                            {% if b.conyuge and b.conyuge.nombres %}
                             
                             <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Nombre Completo</div>
-                            <div class="fw-semibold fs-5 mb-3 text-white">{{ ficha.conyuge.nombres }} {{ ficha.conyuge.ap_paterno }} {{ ficha.conyuge.ap_materno }}</div>
+                            <div class="fw-semibold fs-5 mb-3 text-white">{{ b.conyuge.nombres }} {{ b.conyuge.ap_paterno }} {{ b.conyuge.ap_materno }}</div>
                             
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">N° DNI</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.dni }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.dni }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Nacimiento</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.nacimiento }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.nacimiento }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Estado Civil</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.estado_civil }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.estado_civil }}</div>
                                 </div>
                             </div>
                             
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Instrucción</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.grado_instruccion }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.grado_instruccion }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Ocupación</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.ocupacion }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.ocupacion }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Ingreso (S/.)</div>
-                                    <div class="fw-bold text-success">{{ ficha.conyuge.ingreso_mensual }}</div>
+                                    <div class="fw-bold text-success">{{ b.conyuge.ingreso_mensual }}</div>
                                 </div>
                             </div>
                             
                             <div class="row g-3">
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Situación Laboral</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.sit_laboral }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.sit_laboral }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Condición Econ.</div>
-                                    <div class="fw-medium text-white">{{ ficha.conyuge.condicion }}</div>
+                                    <div class="fw-medium text-white">{{ b.conyuge.condicion }}</div>
                                 </div>
                                 <div class="col-md-4 col-6">
                                     <div class="small text-danger opacity-75 text-uppercase mb-1" style="font-size: 0.70rem;">Discapacidad</div>
-                                    <div class="fw-medium text-warning">{{ ficha.conyuge.discapacidad }}</div>
+                                    <div class="fw-medium text-warning">{{ b.conyuge.discapacidad }}</div>
                                 </div>
                             </div>
                             {% else %}
@@ -301,9 +301,9 @@
                         <div class="row g-3">
                             <div class="col-12">
                                 <div class="p-3 rounded-4 shadow-sm" style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.1);">
-                                    <h6 class="text-white mb-3 fw-bold"><i class="bi bi-person-lines-fill me-2" style="color: #c084fc;"></i> Cargas Familiares <span class="badge bg-secondary ms-2">{{ ficha.cargas|length }}</span></h6>
+                                    <h6 class="text-white mb-3 fw-bold"><i class="bi bi-person-lines-fill me-2" style="color: #c084fc;"></i> Cargas Familiares <span class="badge bg-secondary ms-2">{{ b.cargas|length }}</span></h6>
                                     
-                                    {% if ficha.cargas %}
+                                    {% if b.cargas %}
                                     <div class="table-responsive">
                                         <table class="table table-dark table-borderless table-striped table-sm mb-0 align-middle">
                                             <thead>
@@ -316,7 +316,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for carga in ficha.cargas %}
+                                                {% for carga in b.cargas %}
                                                 <tr>
                                                     <td class="fw-medium">{{ carga.nombres }}</td>
                                                     <td>{{ carga.dni }}</td>
@@ -338,9 +338,9 @@
                             
                             <div class="col-12">
                                 <div class="p-3 rounded-4 shadow-sm" style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.1);">
-                                    <h6 class="text-white mb-3 fw-bold"><i class="bi bi-person-plus-fill me-2" style="color: #c084fc;"></i> Familiar Adicional / Representante <span class="badge bg-secondary ms-2">{{ ficha.adicionales|length }}</span></h6>
+                                    <h6 class="text-white mb-3 fw-bold"><i class="bi bi-person-plus-fill me-2" style="color: #c084fc;"></i> Familiar Adicional / Representante <span class="badge bg-secondary ms-2">{{ b.adicionales|length }}</span></h6>
                                     
-                                    {% if ficha.adicionales %}
+                                    {% if b.adicionales %}
                                     <div class="table-responsive">
                                         <table class="table table-dark table-borderless table-striped table-sm mb-0 align-middle">
                                             <thead>
@@ -351,7 +351,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for adic in ficha.adicionales %}
+                                                {% for adic in b.adicionales %}
                                                 <tr>
                                                     <td class="fw-medium">{{ adic.nombres }} {{ adic.ap_paterno }}</td>
                                                     <td>{{ adic.dni }}</td>
@@ -379,19 +379,19 @@
                             <div class="col-md-6">
                                 <div class="p-2 bg-dark rounded border border-secondary text-white">
                                     <small class="text-white-50 d-block">Partida Registral</small>
-                                    <span class="fw-bold text-break text-light">{{ ficha.predio.partida_registral if ficha.predio and ficha.predio.partida_registral else 'No registrado' }}</span>
+                                    <span class="fw-bold text-break text-light">{{ b.predio.partida_registral if b.predio and b.predio.partida_registral else 'No registrado' }}</span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="p-2 bg-dark rounded border border-secondary text-center text-white">
                                     <small class="text-white-50 d-block">Cuenta c/ Agua</small>
-                                    <span class="fw-bold text-{{ 'success' if ficha.constatacion and ficha.constatacion.tiene_agua else 'danger' }}">{{ 'SÍ' if ficha.constatacion and ficha.constatacion.tiene_agua else 'NO' }}</span>
+                                    <span class="fw-bold text-{{ 'success' if b.constatacion and b.constatacion.tiene_agua else 'danger' }}">{{ 'SÍ' if b.constatacion and b.constatacion.tiene_agua else 'NO' }}</span>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="p-2 bg-dark rounded border border-secondary text-center text-white">
                                     <small class="text-white-50 d-block">Saneamiento</small>
-                                    <span class="fw-bold text-{{ 'success' if ficha.constatacion and ficha.constatacion.tiene_saneamiento else 'danger' }}">{{ 'SÍ' if ficha.constatacion and ficha.constatacion.tiene_saneamiento else 'NO' }}</span>
+                                    <span class="fw-bold text-{{ 'success' if b.constatacion and b.constatacion.tiene_saneamiento else 'danger' }}">{{ 'SÍ' if b.constatacion and b.constatacion.tiene_saneamiento else 'NO' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -412,23 +412,23 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-start fw-bold">FRENTE</td>
-                                        <td>{{ ficha.informe.medida_frente if ficha.informe and ficha.informe.medida_frente else '-' }}</td>
-                                        <td>{{ ficha.informe.colindante_frente if ficha.informe and ficha.informe.colindante_frente else '-' }}</td>
+                                        <td>{{ b.informe.medida_frente if b.informe and b.informe.medida_frente else '-' }}</td>
+                                        <td>{{ b.informe.colindante_frente if b.informe and b.informe.colindante_frente else '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td class="text-start fw-bold">DERECHA</td>
-                                        <td>{{ ficha.informe.medida_derecha if ficha.informe and ficha.informe.medida_derecha else '-' }}</td>
-                                        <td>{{ ficha.informe.colindante_derecha if ficha.informe and ficha.informe.colindante_derecha else '-' }}</td>
+                                        <td>{{ b.informe.medida_derecha if b.informe and b.informe.medida_derecha else '-' }}</td>
+                                        <td>{{ b.informe.colindante_derecha if b.informe and b.informe.colindante_derecha else '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td class="text-start fw-bold">IZQUIERDA</td>
-                                        <td>{{ ficha.informe.medida_izquierda if ficha.informe and ficha.informe.medida_izquierda else '-' }}</td>
-                                        <td>{{ ficha.informe.colindante_izquierda if ficha.informe and ficha.informe.colindante_izquierda else '-' }}</td>
+                                        <td>{{ b.informe.medida_izquierda if b.informe and b.informe.medida_izquierda else '-' }}</td>
+                                        <td>{{ b.informe.colindante_izquierda if b.informe and b.informe.colindante_izquierda else '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td class="text-start fw-bold">FONDO</td>
-                                        <td>{{ ficha.informe.medida_fondo if ficha.informe and ficha.informe.medida_fondo else '-' }}</td>
-                                        <td>{{ ficha.informe.colindante_fondo if ficha.informe and ficha.informe.colindante_fondo else '-' }}</td>
+                                        <td>{{ b.informe.medida_fondo if b.informe and b.informe.medida_fondo else '-' }}</td>
+                                        <td>{{ b.informe.colindante_fondo if b.informe and b.informe.colindante_fondo else '-' }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -437,13 +437,13 @@
                             <div class="col-md-4">
                                 <div class="p-2 bg-dark rounded border border-secondary h-100 text-white">
                                     <small class="text-white-50 d-block">Área de Terreno</small>
-                                    <span class="fw-bold">{{ ficha.informe.area_terreno if ficha.informe and ficha.informe.area_terreno else '-' }} m2</span>
+                                    <span class="fw-bold">{{ b.informe.area_terreno if b.informe and b.informe.area_terreno else '-' }} m2</span>
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="p-2 bg-dark rounded border border-secondary h-100 text-white">
                                     <small class="text-white-50 d-block">Descripción</small>
-                                    <span class="fw-bold text-break">{{ ficha.informe.descripcion if ficha.informe and ficha.informe.descripcion else '-' }}</span>
+                                    <span class="fw-bold text-break">{{ b.informe.descripcion if b.informe and b.informe.descripcion else '-' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -456,11 +456,11 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Correo Electrónico</div>
-                                    <div class="fw-semibold text-white fs-6">{{ ficha.correo_contacto or 'No registrado' }}</div>
+                                    <div class="fw-semibold text-white fs-6">{{ b.correo_contacto or 'No registrado' }}</div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="small text-info opacity-75 text-uppercase mb-1" style="font-size: 0.70rem; letter-spacing: 0.5px;">Teléfono / Celular</div>
-                                    <div class="fw-semibold text-white fs-6">{{ ficha.telefono_contacto or 'No registrado' }}</div>
+                                    <div class="fw-semibold text-white fs-6">{{ b.telefono_contacto or 'No registrado' }}</div>
                                 </div>
                             </div>
                         </div>

@@ -4,30 +4,30 @@
 
 <div class="card">
     <div class="card-header">
-        <h4 class="mb-0 fw-bold">{{ "Actualizar Matriz" if ficha else "Crear Matriz" }}</h4>
+        <h4 class="mb-0 fw-bold">{{ "Actualizar Beneficiario" if beneficiario else "Crear Beneficiario" }}</h4>
     </div>
     <div class="card-body">
 
-        <form action="{{ action_url|default('/matriz/actualizar/' ~ ficha.id_ficha if ficha else '/matriz/crear') }}" method="POST"
+        <form action="{{ action_url|default('/matriz/actualizar/' ~ beneficiario.id_beneficiario_jefe if beneficiario else '/matriz/crear') }}" method="POST"
             onkeydown="return event.key != 'Enter';">
 
-            <h5 class="mb-3 border-bottom pb-2 text-primary">0. Entidad Técnica a Cargo</h5>
+            <h5 class="mb-3 border-bottom pb-2 text-primary">0. Proyecto a Cargo</h5>
             <div class="row mb-4">
                 <div class="col-12">
-                    <label class="form-label fw-bold">Seleccione la Entidad Técnica</label>
-                    <select class="form-select" {% if entidades|length == 1 %}disabled{% else %}name="id_entidad_tecnica" required{% endif %}>
-                        {% if entidades|length != 1 %}
-                        <option value="">-- Seleccione una Entidad --</option>
+                    <label class="form-label fw-bold">Seleccione la Proyecto</label>
+                    <select class="form-select" {% if proyectos|length == 1 %}disabled{% else %}name="id_proyecto" required{% endif %}>
+                        {% if proyectos|length != 1 %}
+                        <option value="">-- Seleccione una Proyecto --</option>
                         {% endif %}
-                        {% for e in entidades %}
-                        <option value="{{ e.id_entidad_tecnica }}" 
-                            {% if (ficha and ficha.id_entidad_tecnica==e.id_entidad_tecnica) or entidades|length == 1 %}selected{% endif %}>
-                            {{ e.razon_social }} (RUC: {{ e.ruc }})
+                        {% for p in proyectos %}
+                        <option value="{{ p.id_proyecto }}" 
+                            {% if (beneficiario and beneficiario.id_proyecto==p.id_proyecto) or proyectos|length == 1 %}selected{% endif %}>
+                            {{ p.codigo_proyecto }} (Año: {{ p.anio }})
                         </option>
                         {% endfor %}
                     </select>
-                    {% if entidades|length == 1 %}
-                    <input type="hidden" name="id_entidad_tecnica" value="{{ entidades[0].id_entidad_tecnica }}">
+                    {% if proyectos|length == 1 %}
+                    <input type="hidden" name="id_proyecto" value="{{ proyectos[0].id_proyecto }}">
                     {% endif %}
                 </div>
             </div>
@@ -40,14 +40,14 @@
                     <label class="form-label fw-bold text-success">Partida Registral</label>
                     <input type="text" class="form-control" name="partida_registral"
                         oninput="this.value = this.value.toUpperCase()"
-                        value="{{ ficha.predio.partida_registral if ficha and ficha.predio else '' }}" placeholder="Ej: P01234567" required>
+                        value="{{ beneficiario.predio.partida_registral if beneficiario and beneficiario.predio else '' }}" placeholder="Ej: P01234567" required>
                 </div>
                 <div class="col-md-8 mb-3">
 
                     <label class="form-label fw-bold">Direcci&oacute;n</label>
                     <input type="text" class="form-control" name="direccion"
                         oninput="this.value = this.value.toUpperCase()"
-                        value="{{ ficha.predio.direccion if ficha and ficha.predio else '' }}" required>
+                        value="{{ beneficiario.predio.direccion if beneficiario and beneficiario.predio else '' }}" required>
                 </div>
             </div>
 
@@ -55,21 +55,21 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold" for="departamento_select">Departamento</label>
                     <select class="form-select" name="departamento" id="departamento_select" required
-                        data-selected="{{ ficha.predio.departamento if ficha and ficha.predio else '' }}">
+                        data-selected="{{ beneficiario.predio.departamento if beneficiario and beneficiario.predio else '' }}">
                         <option value="">Cargando...</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold" for="provincia_select">Provincia</label>
                     <select class="form-select" name="provincia" id="provincia_select" required
-                        data-selected="{{ ficha.predio.provincia if ficha and ficha.predio else '' }}">
+                        data-selected="{{ beneficiario.predio.provincia if beneficiario and beneficiario.predio else '' }}">
                         <option value="">Seleccione un departamento primero...</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold" for="distrito_select">Distrito</label>
                     <select class="form-select" name="distrito" id="distrito_select" required
-                        data-selected="{{ ficha.predio.distrito if ficha and ficha.predio else '' }}">
+                        data-selected="{{ beneficiario.predio.distrito if beneficiario and beneficiario.predio else '' }}">
                         <option value="">Seleccione una provincia primero...</option>
                     </select>
                 </div>
@@ -79,27 +79,27 @@
                 <div class="col-md-2 mb-3">
                     <label class="form-label fw-bold">Manzana</label>
                     <input type="text" class="form-control" name="manzana"
-                        value="{{ ficha.predio.manzana if ficha and ficha.predio else '' }}">
+                        value="{{ beneficiario.predio.manzana if beneficiario and beneficiario.predio else '' }}">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label class="form-label fw-bold">Lote</label>
                     <input type="text" class="form-control" name="lote"
-                        value="{{ ficha.predio.lote if ficha and ficha.predio else '' }}">
+                        value="{{ beneficiario.predio.lote if beneficiario and beneficiario.predio else '' }}">
                 </div>
                 <div class="col-md-2 mb-3">
                     <label class="form-label fw-bold">Sublote</label>
                     <input type="text" class="form-control" name="sublote"
-                        value="{{ ficha.predio.sublote if ficha and ficha.predio else '' }}">
+                        value="{{ beneficiario.predio.sublote if beneficiario and beneficiario.predio else '' }}">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label fw-bold">Centro Poblado</label>
                     <input type="text" class="form-control" name="centro_poblado"
-                        value="{{ ficha.predio.centro_poblado if ficha and ficha.predio else '' }}">
+                        value="{{ beneficiario.predio.centro_poblado if beneficiario and beneficiario.predio else '' }}">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label fw-bold">Referencia</label>
                     <input type="text" class="form-control" name="referencia"
-                        value="{{ ficha.predio.referencia if ficha and ficha.predio else '' }}">
+                        value="{{ beneficiario.predio.referencia if beneficiario and beneficiario.predio else '' }}">
                 </div>
             </div>
 
@@ -110,17 +110,17 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Nombre(s)</label>
                     <input type="text" class="form-control" name="nombres_jefe"
-                        value="{{ ficha.jefe.nombres if ficha and ficha.jefe else '' }}" required>
+                        value="{{ beneficiario.nombres if beneficiario and beneficiario.jefe else '' }}" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Apellido Paterno</label>
                     <input type="text" class="form-control" name="ap_paterno_jefe"
-                        value="{{ ficha.jefe.ap_paterno if ficha and ficha.jefe else '' }}" required>
+                        value="{{ beneficiario.ap_paterno if beneficiario and beneficiario.jefe else '' }}" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Apellido Materno</label>
                     <input type="text" class="form-control" name="ap_materno_jefe"
-                        value="{{ ficha.jefe.ap_materno if ficha and ficha.jefe else '' }}" required>
+                        value="{{ beneficiario.ap_materno if beneficiario and beneficiario.jefe else '' }}" required>
                 </div>
             </div>
 
@@ -128,17 +128,17 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">N° DNI</label>
                     <input type="text" class="form-control" name="dni_jefe"
-                        value="{{ ficha.jefe.dni if ficha and ficha.jefe else '' }}" required maxlength="8"
+                        value="{{ beneficiario.dni if beneficiario and beneficiario.jefe else '' }}" required maxlength="8"
                         minlength="8" pattern="\d{8}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Fecha de Nacimiento</label>
                     <input type="date" class="form-control" name="nacimiento_jefe"
-                        value="{{ ficha.jefe.nacimiento if ficha and ficha.jefe else '' }}" required>
+                        value="{{ beneficiario.nacimiento if beneficiario and beneficiario.jefe else '' }}" required>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Estado Civil</label>
-                    {% set ecj = ficha.jefe.estado_civil if ficha and ficha.jefe else "" %}
+                    {% set ecj = beneficiario.estado_civil if beneficiario and beneficiario.jefe else "" %}
                     <select class="form-select" name="estado_civil_jefe" id="estado_civil_jefe"
                         data-selected="{{ ecj }}" required>
                         <option value="">Cargando...</option>
@@ -149,30 +149,30 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Grado de Instrucción</label>
-                    <select class="form-select instruccion-select" name="grado_instruccion" data-selected="{{ ficha.jefe.grado_instruccion if ficha and ficha.jefe else '' }}" required><option value="">Seleccione...</option></select>
+                    <select class="form-select instruccion-select" name="grado_instruccion" data-selected="{{ beneficiario.grado_instruccion if beneficiario and beneficiario.jefe else '' }}" required><option value="">Seleccione...</option></select>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Ocupación</label>
                     <input type="text" class="form-control" name="ocupacion"
-                        value="{{ ficha.jefe.ocupacion if ficha and ficha.jefe else '' }}" required>
+                        value="{{ beneficiario.ocupacion if beneficiario and beneficiario.jefe else '' }}" required>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold d-block">Discapacidad</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="discapacidad" value="" required {% if not
-                            ficha or not ficha.jefe or ficha.jefe.discapacidad not in ["PERMANENTE", "SEVERA" ]
+                            beneficiario or not beneficiario.jefe or beneficiario.discapacidad not in ["PERMANENTE", "SEVERA" ]
                             %}checked{% endif %} id="disc0">
                         <label class="form-check-label" for="disc0">Ninguna</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="discapacidad" value="Permanente" {% if ficha
-                            and ficha.jefe and ficha.jefe.discapacidad=="PERMANENTE" %}checked{% endif %} id="disc1">
+                            and beneficiario.jefe and beneficiario.discapacidad=="PERMANENTE" %}checked{% endif %} id="disc1">
                         <label class="form-check-label" for="disc1">Permanente</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="discapacidad" value="Severa" {% if ficha and
-                            ficha.jefe and ficha.jefe.discapacidad=="SEVERA" %}checked{% endif %} id="disc2">
+                        <input class="form-check-input" type="radio" name="discapacidad" value="Severa" {% if beneficiario and
+                            beneficiario.jefe and beneficiario.discapacidad=="SEVERA" %}checked{% endif %} id="disc2">
                         <label class="form-check-label" for="disc2">Severa</label>
                     </div>
                 </div>
@@ -186,13 +186,13 @@
                         <label class="form-label fw-bold d-block">Situación Laboral</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="sit_laboral" value="Dependiente" required
-                                {% if ficha and ficha.jefe and ficha.jefe.sit_laboral=="DEPENDIENTE" %}checked{% endif
+                                {% if beneficiario and beneficiario.jefe and beneficiario.sit_laboral=="DEPENDIENTE" %}checked{% endif
                                 %} id="sit1">
                             <label class="form-check-label" for="sit1">Dependiente</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="sit_laboral" value="Independiente" {% if
-                                ficha and ficha.jefe and ficha.jefe.sit_laboral=="INDEPENDIENTE" %}checked{% endif %}
+                                beneficiario and beneficiario.jefe and beneficiario.sit_laboral=="INDEPENDIENTE" %}checked{% endif %}
                                 id="sit2">
                             <label class="form-check-label" for="sit2">Independiente</label>
                         </div>
@@ -202,13 +202,13 @@
                         <label class="form-label fw-bold d-block">Condición</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="condicion_eco" value="Formal" required {%
-                                if ficha and ficha.jefe and ficha.jefe.condicion_eco=="FORMAL" %}checked{% endif %}
+                                if beneficiario and beneficiario.jefe and beneficiario.condicion_eco=="FORMAL" %}checked{% endif %}
                                 id="cond1">
                             <label class="form-check-label" for="cond1">Formal</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="condicion_eco" value="Informal" {% if
-                                ficha and ficha.jefe and ficha.jefe.condicion_eco=="INFORMAL" %}checked{% endif %}
+                                beneficiario and beneficiario.jefe and beneficiario.condicion_eco=="INFORMAL" %}checked{% endif %}
                                 id="cond2">
                             <label class="form-check-label" for="cond2">Informal</label>
                         </div>
@@ -219,7 +219,7 @@
                         <input type="number" step="0.01" class="form-control" name="ingreso_mensual"
                             id="ingreso_mensual"
                             onkeydown="return event.key != '+' && event.key != '-' && event.key != 'e' && event.key != 'E'"
-                            min="0" value="{{ ficha.jefe.ingreso_mensual if ficha and ficha.jefe else '' }}" required>
+                            min="0" value="{{ beneficiario.ingreso_mensual if beneficiario and beneficiario.jefe else '' }}" required>
                     </div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
 
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="checkTieneConyuge" name="checkTieneConyuge" {%
-                        if ficha and ficha.conyuge and ficha.conyuge.nombres %}checked{% endif %}>
+                        if beneficiario and beneficiario.conyuge and beneficiario.conyuge.nombres %}checked{% endif %}>
                     <label class="form-check-label fw-bold" for="checkTieneConyuge">¿Tiene Cónyuge?</label>
                 </div>
             </div>
@@ -243,17 +243,17 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_nombres_conyuge">Nombre(s)</label>
                         <input type="text" class="form-control" name="nombres_conyuge" id="id_nombres_conyuge"
-                            value="{{ ficha.conyuge.nombres if ficha and ficha.conyuge else '' }}">
+                            value="{{ beneficiario.conyuge.nombres if beneficiario and beneficiario.conyuge else '' }}">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_ap_paterno_conyuge">Apellido Paterno</label>
                         <input type="text" class="form-control" name="ap_paterno_conyuge" id="id_ap_paterno_conyuge"
-                            value="{{ ficha.conyuge.ap_paterno if ficha and ficha.conyuge else '' }}">
+                            value="{{ beneficiario.conyuge.ap_paterno if beneficiario and beneficiario.conyuge else '' }}">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_ap_materno_conyuge">Apellido Materno</label>
                         <input type="text" class="form-control" name="ap_materno_conyuge" id="id_ap_materno_conyuge"
-                            value="{{ ficha.conyuge.ap_materno if ficha and ficha.conyuge else '' }}">
+                            value="{{ beneficiario.conyuge.ap_materno if beneficiario and beneficiario.conyuge else '' }}">
                     </div>
                 </div>
 
@@ -261,18 +261,18 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_dni_conyuge">N° DNI</label>
                         <input type="text" class="form-control" name="dni_conyuge" id="id_dni_conyuge"
-                            value="{{ ficha.conyuge.dni if ficha and ficha.conyuge else '' }}" maxlength="8"
+                            value="{{ beneficiario.conyuge.dni if beneficiario and beneficiario.conyuge else '' }}" maxlength="8"
                             minlength="8" pattern="\d{8}"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_nacimiento_conyuge">Fecha de Nacimiento</label>
                         <input type="date" class="form-control" name="nacimiento_conyuge" id="id_nacimiento_conyuge"
-                            value="{{ ficha.conyuge.nacimiento if ficha and ficha.conyuge else '' }}">
+                            value="{{ beneficiario.conyuge.nacimiento if beneficiario and beneficiario.conyuge else '' }}">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_civil_conyuge">Estado Civil</label>
-                        {% set ecc = ficha.conyuge.estado_civil if ficha and ficha.conyuge else "" %}
+                        {% set ecc = beneficiario.conyuge.estado_civil if beneficiario and beneficiario.conyuge else "" %}
                         <select class="form-select" name="estado_civil_conyuge" id="id_civil_conyuge"
                             data-selected="{{ ecc }}">
                             <option value="">Cargando...</option>
@@ -283,31 +283,31 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_instruccion_conyuge">Grado de Instrucción</label>
-                        <select class="form-select instruccion-select" name="grado_instruccion_conyuge" id="id_instruccion_conyuge" data-selected="{{ ficha.conyuge.grado_instruccion if ficha and ficha.conyuge else '' }}"><option value="">Seleccione...</option></select>
+                        <select class="form-select instruccion-select" name="grado_instruccion_conyuge" id="id_instruccion_conyuge" data-selected="{{ beneficiario.conyuge.grado_instruccion if beneficiario and beneficiario.conyuge else '' }}"><option value="">Seleccione...</option></select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-bold" for="id_ocupacion_conyuge">Ocupación</label>
                         <input type="text" class="form-control" name="ocupacion_conyuge" id="id_ocupacion_conyuge"
-                            value="{{ ficha.conyuge.ocupacion if ficha and ficha.conyuge else '' }}">
+                            value="{{ beneficiario.conyuge.ocupacion if beneficiario and beneficiario.conyuge else '' }}">
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <span class="form-label fw-bold d-block">Discapacidad</span>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="discapacidad_conyuge" id="disc_c_nin"
-                                value="" {% if not ficha or not ficha.conyuge or ficha.conyuge.discapacidad not in
+                                value="" {% if not beneficiario or not beneficiario.conyuge or beneficiario.conyuge.discapacidad not in
                                 ["PERMANENTE", "SEVERA" ] %}checked{% endif %}>
                             <label class="form-check-label" for="disc_c_nin">Ninguna</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="discapacidad_conyuge" id="disc_c_per"
-                                value="Permanente" {% if ficha and ficha.conyuge and
-                                ficha.conyuge.discapacidad=="PERMANENTE" %}checked{% endif %}>
+                                value="Permanente" {% if beneficiario and beneficiario.conyuge and
+                                beneficiario.conyuge.discapacidad=="PERMANENTE" %}checked{% endif %}>
                             <label class="form-check-label" for="disc_c_per">Permanente</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="discapacidad_conyuge" id="disc_c_sev"
-                                value="Severa" {% if ficha and ficha.conyuge and ficha.conyuge.discapacidad=="SEVERA"
+                                value="Severa" {% if beneficiario and beneficiario.conyuge and beneficiario.conyuge.discapacidad=="SEVERA"
                                 %}checked{% endif %}>
                             <label class="form-check-label" for="disc_c_sev">Severa</label>
                         </div>
@@ -322,14 +322,14 @@
                             <span class="form-label fw-bold d-block">Situación Laboral</span>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="sit_laboral_conyuge" id="sit_c_dep"
-                                    value="Dependiente" {% if ficha and ficha.conyuge and
-                                    ficha.conyuge.sit_laboral=="DEPENDIENTE" %}checked{% endif %}>
+                                    value="Dependiente" {% if beneficiario and beneficiario.conyuge and
+                                    beneficiario.conyuge.sit_laboral=="DEPENDIENTE" %}checked{% endif %}>
                                 <label class="form-check-label" for="sit_c_dep">Dependiente</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="sit_laboral_conyuge" id="sit_c_ind"
-                                    value="Independiente" {% if ficha and ficha.conyuge and
-                                    ficha.conyuge.sit_laboral=="INDEPENDIENTE" %}checked{% endif %}>
+                                    value="Independiente" {% if beneficiario and beneficiario.conyuge and
+                                    beneficiario.conyuge.sit_laboral=="INDEPENDIENTE" %}checked{% endif %}>
                                 <label class="form-check-label" for="sit_c_ind">Independiente</label>
                             </div>
                         </div>
@@ -338,14 +338,14 @@
                             <span class="form-label fw-bold d-block">Condición</span>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="condicion_conyuge" id="cond_c_for"
-                                    value="Formal" {% if ficha and ficha.conyuge and ficha.conyuge.condicion=="FORMAL"
+                                    value="Formal" {% if beneficiario and beneficiario.conyuge and beneficiario.conyuge.condicion=="FORMAL"
                                     %}checked{% endif %}>
                                 <label class="form-check-label" for="cond_c_for">Formal</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="condicion_conyuge" id="cond_c_inf"
-                                    value="Informal" {% if ficha and ficha.conyuge and
-                                    ficha.conyuge.condicion=="INFORMAL" %}checked{% endif %}>
+                                    value="Informal" {% if beneficiario and beneficiario.conyuge and
+                                    beneficiario.conyuge.condicion=="INFORMAL" %}checked{% endif %}>
                                 <label class="form-check-label" for="cond_c_inf">Informal</label>
                             </div>
                         </div>
@@ -355,7 +355,7 @@
                             <input type="number" step="0.01" class="form-control" name="ingreso_mensual_conyuge"
                                 id="id_ingreso_conyuge"
                                 onkeydown="return event.key != '+' && event.key != '-' && event.key != 'e' && event.key != 'E'"
-                                min="0" value="{{ ficha.conyuge.ingreso_mensual if ficha and ficha.conyuge else '' }}">
+                                min="0" value="{{ beneficiario.conyuge.ingreso_mensual if beneficiario and beneficiario.conyuge else '' }}">
                         </div>
                     </div>
                 </div>
@@ -369,7 +369,7 @@
 
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="checkTieneCarga" name="checkTieneCarga" {% if
-                        ficha and ficha.cargas|length> 0 %}checked{% endif %}>
+                        beneficiario and beneficiario.cargas|length> 0 %}checked{% endif %}>
                     <label class="form-check-label fw-bold" for="checkTieneCarga">¿Tiene Carga Familiar?</label>
                 </div>
             </div>
@@ -396,43 +396,43 @@
                             <tr>
                                 <td class="fw-bold text-center bg-light">01</td>
                                 <td><input type="text" class="form-control form-control-sm" name="nombres_carga_1"
-                                        value="{{ ficha.cargas[0].nombres if ficha and ficha.cargas|length > 0 else '' }}">
+                                        value="{{ beneficiario.cargas[0].nombres if beneficiario and beneficiario.cargas|length > 0 else '' }}">
                                 </td>
                                 <td><input type="text" class="form-control form-control-sm" name="dni_carga_1"
-                                        value="{{ ficha.cargas[0].dni if ficha and ficha.cargas|length > 0 else '' }}">
+                                        value="{{ beneficiario.cargas[0].dni if beneficiario and beneficiario.cargas|length > 0 else '' }}">
                                 </td>
                                 <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_1"
-                                        value="{{ ficha.cargas[0].nacimiento if ficha and ficha.cargas|length > 0 else '' }}">
+                                        value="{{ beneficiario.cargas[0].nacimiento if beneficiario and beneficiario.cargas|length > 0 else '' }}">
                                 </td>
                                 <td><select class="form-select form-select-sm vinculo-select-carga"
                                         name="vinculo_carga_1" id="vinculo_carga_1"
-                                        data-selected="{{ ficha.cargas[0].vinculo if ficha and ficha.cargas|length > 0 else '' }}">
+                                        data-selected="{{ beneficiario.cargas[0].vinculo if beneficiario and beneficiario.cargas|length > 0 else '' }}">
                                         <option value="">Seleccione...</option>
                                     </select></td>
-                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_1" data-selected="{{ ficha.cargas[0].instruccion if ficha and ficha.cargas|length > 0 else '' }}"><option value="">Sel...</option></select>
+                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_1" data-selected="{{ beneficiario.cargas[0].instruccion if beneficiario and beneficiario.cargas|length > 0 else '' }}"><option value="">Sel...</option></select>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column gap-1">
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_1"
-                                                value="" {% if not ficha or ficha.cargas|length==0 or
-                                                ficha.cargas[0].discapacidad not in ["PERMANENTE", "SEVERA" ]
+                                                value="" {% if not beneficiario or beneficiario.cargas|length==0 or
+                                                beneficiario.cargas[0].discapacidad not in ["PERMANENTE", "SEVERA" ]
                                                 %}checked{% endif %} id="disc_c1_nin">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c1_nin">Ninguna</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_1"
-                                                value="Permanente" {% if ficha and ficha.cargas|length> 0 and
-                                            ficha.cargas[0].discapacidad == "PERMANENTE" %}checked{% endif %}
+                                                value="Permanente" {% if beneficiario and beneficiario.cargas|length> 0 and
+                                            beneficiario.cargas[0].discapacidad == "PERMANENTE" %}checked{% endif %}
                                             id="disc_c1_per">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c1_per">Permanente</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_1"
-                                                value="Severa" {% if ficha and ficha.cargas|length> 0 and
-                                            ficha.cargas[0].discapacidad == "SEVERA" %}checked{% endif %}
+                                                value="Severa" {% if beneficiario and beneficiario.cargas|length> 0 and
+                                            beneficiario.cargas[0].discapacidad == "SEVERA" %}checked{% endif %}
                                             id="disc_c1_sev">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c1_sev">Severa</label>
@@ -444,43 +444,43 @@
                             <tr>
                                 <td class="fw-bold text-center bg-light">02</td>
                                 <td><input type="text" class="form-control form-control-sm" name="nombres_carga_2"
-                                        value="{{ ficha.cargas[1].nombres if ficha and ficha.cargas|length > 1 else '' }}">
+                                        value="{{ beneficiario.cargas[1].nombres if beneficiario and beneficiario.cargas|length > 1 else '' }}">
                                 </td>
                                 <td><input type="text" class="form-control form-control-sm" name="dni_carga_2"
-                                        value="{{ ficha.cargas[1].dni if ficha and ficha.cargas|length > 1 else '' }}">
+                                        value="{{ beneficiario.cargas[1].dni if beneficiario and beneficiario.cargas|length > 1 else '' }}">
                                 </td>
                                 <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_2"
-                                        value="{{ ficha.cargas[1].nacimiento if ficha and ficha.cargas|length > 1 else '' }}">
+                                        value="{{ beneficiario.cargas[1].nacimiento if beneficiario and beneficiario.cargas|length > 1 else '' }}">
                                 </td>
                                 <td><select class="form-select form-select-sm vinculo-select-carga"
                                         name="vinculo_carga_2" id="vinculo_carga_2"
-                                        data-selected="{{ ficha.cargas[1].vinculo if ficha and ficha.cargas|length > 1 else '' }}">
+                                        data-selected="{{ beneficiario.cargas[1].vinculo if beneficiario and beneficiario.cargas|length > 1 else '' }}">
                                         <option value="">Seleccione...</option>
                                     </select></td>
-                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_2" data-selected="{{ ficha.cargas[1].instruccion if ficha and ficha.cargas|length > 1 else '' }}"><option value="">Sel...</option></select>
+                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_2" data-selected="{{ beneficiario.cargas[1].instruccion if beneficiario and beneficiario.cargas|length > 1 else '' }}"><option value="">Sel...</option></select>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column gap-1">
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_2"
-                                                value="" {% if not ficha or ficha.cargas|length <=1 or
-                                                ficha.cargas[1].discapacidad not in ["PERMANENTE", "SEVERA" ]
+                                                value="" {% if not beneficiario or beneficiario.cargas|length <=1 or
+                                                beneficiario.cargas[1].discapacidad not in ["PERMANENTE", "SEVERA" ]
                                                 %}checked{% endif %} id="disc_c2_nin">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c2_nin">Ninguna</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_2"
-                                                value="Permanente" {% if ficha and ficha.cargas|length> 1 and
-                                            ficha.cargas[1].discapacidad == "PERMANENTE" %}checked{% endif %}
+                                                value="Permanente" {% if beneficiario and beneficiario.cargas|length> 1 and
+                                            beneficiario.cargas[1].discapacidad == "PERMANENTE" %}checked{% endif %}
                                             id="disc_c2_per">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c2_per">Permanente</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_2"
-                                                value="Severa" {% if ficha and ficha.cargas|length> 1 and
-                                            ficha.cargas[1].discapacidad == "SEVERA" %}checked{% endif %}
+                                                value="Severa" {% if beneficiario and beneficiario.cargas|length> 1 and
+                                            beneficiario.cargas[1].discapacidad == "SEVERA" %}checked{% endif %}
                                             id="disc_c2_sev">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c2_sev">Severa</label>
@@ -492,43 +492,43 @@
                             <tr>
                                 <td class="fw-bold text-center bg-light">03</td>
                                 <td><input type="text" class="form-control form-control-sm" name="nombres_carga_3"
-                                        value="{{ ficha.cargas[2].nombres if ficha and ficha.cargas|length > 2 else '' }}">
+                                        value="{{ beneficiario.cargas[2].nombres if beneficiario and beneficiario.cargas|length > 2 else '' }}">
                                 </td>
                                 <td><input type="text" class="form-control form-control-sm" name="dni_carga_3"
-                                        value="{{ ficha.cargas[2].dni if ficha and ficha.cargas|length > 2 else '' }}">
+                                        value="{{ beneficiario.cargas[2].dni if beneficiario and beneficiario.cargas|length > 2 else '' }}">
                                 </td>
                                 <td><input type="date" class="form-control form-control-sm" name="nacimiento_carga_3"
-                                        value="{{ ficha.cargas[2].nacimiento if ficha and ficha.cargas|length > 2 else '' }}">
+                                        value="{{ beneficiario.cargas[2].nacimiento if beneficiario and beneficiario.cargas|length > 2 else '' }}">
                                 </td>
                                 <td><select class="form-select form-select-sm vinculo-select-carga"
                                         name="vinculo_carga_3" id="vinculo_carga_3"
-                                        data-selected="{{ ficha.cargas[2].vinculo if ficha and ficha.cargas|length > 2 else '' }}">
+                                        data-selected="{{ beneficiario.cargas[2].vinculo if beneficiario and beneficiario.cargas|length > 2 else '' }}">
                                         <option value="">Seleccione...</option>
                                     </select></td>
-                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_3" data-selected="{{ ficha.cargas[2].instruccion if ficha and ficha.cargas|length > 2 else '' }}"><option value="">Sel...</option></select>
+                                <td><select class="form-select form-select-sm instruccion-select" name="instruccion_carga_3" data-selected="{{ beneficiario.cargas[2].instruccion if beneficiario and beneficiario.cargas|length > 2 else '' }}"><option value="">Sel...</option></select>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column gap-1">
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_3"
-                                                value="" {% if not ficha or ficha.cargas|length <=2 or
-                                                ficha.cargas[2].discapacidad not in ["PERMANENTE", "SEVERA" ]
+                                                value="" {% if not beneficiario or beneficiario.cargas|length <=2 or
+                                                beneficiario.cargas[2].discapacidad not in ["PERMANENTE", "SEVERA" ]
                                                 %}checked{% endif %} id="disc_c3_nin">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c3_nin">Ninguna</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_3"
-                                                value="Permanente" {% if ficha and ficha.cargas|length> 2 and
-                                            ficha.cargas[2].discapacidad == "PERMANENTE" %}checked{% endif %}
+                                                value="Permanente" {% if beneficiario and beneficiario.cargas|length> 2 and
+                                            beneficiario.cargas[2].discapacidad == "PERMANENTE" %}checked{% endif %}
                                             id="disc_c3_per">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c3_per">Permanente</label>
                                         </div>
                                         <div class="form-check form-check-inline m-0">
                                             <input class="form-check-input" type="radio" name="discapacidad_carga_3"
-                                                value="Severa" {% if ficha and ficha.cargas|length> 2 and
-                                            ficha.cargas[2].discapacidad == "SEVERA" %}checked{% endif %}
+                                                value="Severa" {% if beneficiario and beneficiario.cargas|length> 2 and
+                                            beneficiario.cargas[2].discapacidad == "SEVERA" %}checked{% endif %}
                                             id="disc_c3_sev">
                                             <label class="form-check-label" style="font-size: 0.8rem;"
                                                 for="disc_c3_sev">Severa</label>
@@ -567,24 +567,24 @@
 
                             <td class="p-2">
                                 <input type="text" class="form-control form-control-sm" name="nombres_adic_1"
-                                    value="{{ ficha.adicionales[0].nombres if ficha and ficha.adicionales|length > 0 else '' }}">
+                                    value="{{ beneficiario.adicionales[0].nombres if beneficiario and beneficiario.adicionales|length > 0 else '' }}">
                             </td>
                             <td class="p-2">
                                 <input type="text" class="form-control form-control-sm" name="ap_paterno_adic_1"
-                                    value="{{ ficha.adicionales[0].ap_paterno if ficha and ficha.adicionales|length > 0 else '' }}">
+                                    value="{{ beneficiario.adicionales[0].ap_paterno if beneficiario and beneficiario.adicionales|length > 0 else '' }}">
                             </td>
                             <td class="p-2">
                                 <input type="text" class="form-control form-control-sm" name="ap_materno_adic_1"
-                                    value="{{ ficha.adicionales[0].ap_materno if ficha and ficha.adicionales|length > 0 else '' }}">
+                                    value="{{ beneficiario.adicionales[0].ap_materno if beneficiario and beneficiario.adicionales|length > 0 else '' }}">
                             </td>
                             <td class="p-2">
                                 <input type="text" class="form-control form-control-sm" name="dni_adic_1"
-                                    value="{{ ficha.adicionales[0].dni if ficha and ficha.adicionales|length > 0 else '' }}">
+                                    value="{{ beneficiario.adicionales[0].dni if beneficiario and beneficiario.adicionales|length > 0 else '' }}">
                             </td>
                             <td class="p-2">
                                 <select class="form-select form-select-sm vinculo-select-adic" name="vinculo_adic_1"
                                     id="vinculo_adic_1"
-                                    data-selected="{{ ficha.adicionales[0].vinculo if ficha and ficha.adicionales|length > 0 else '' }}">
+                                    data-selected="{{ beneficiario.adicionales[0].vinculo if beneficiario and beneficiario.adicionales|length > 0 else '' }}">
                                     <option value="">Seleccione...</option>
                                 </select>
                             </td>
@@ -614,11 +614,11 @@
                             <td class="p-2">
                                 <input type="email" class="form-control" name="correo_contacto"
                                     placeholder="ejemplo@correo.com"
-                                    value="{{ ficha.correo_contacto if ficha else '' }}">
+                                    value="{{ beneficiario.correo_contacto if beneficiario else '' }}">
                             </td>
                             <td class="p-2">
                                 <input type="text" class="form-control" name="telefono_contacto" required
-                                    placeholder="999 999 999" value="{{ ficha.telefono_contacto if ficha else '' }}">
+                                    placeholder="999 999 999" value="{{ beneficiario.telefono_contacto if beneficiario else '' }}">
                             </td>
                         </tr>
 
@@ -636,14 +636,14 @@
                 <div class="col-md-4 mb-3 d-flex align-items-center">
                     <div class="form-check form-switch mt-4">
                         <input class="form-check-input" type="checkbox" name="tiene_agua" id="checkAgua"
-                               {% if ficha and ficha.constatacion and ficha.constatacion.tiene_agua %}checked{% endif %}>
+                               {% if beneficiario and beneficiario.constatacion and beneficiario.constatacion.tiene_agua %}checked{% endif %}>
                         <label class="form-check-label fw-bold" for="checkAgua">¿Cuenta con Agua?</label>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3 d-flex align-items-center">
                     <div class="form-check form-switch mt-4">
                         <input class="form-check-input" type="checkbox" name="tiene_saneamiento" id="checkSaneamiento"
-                               {% if ficha and ficha.constatacion and ficha.constatacion.tiene_saneamiento %}checked{% endif %}>
+                               {% if beneficiario and beneficiario.constatacion and beneficiario.constatacion.tiene_saneamiento %}checked{% endif %}>
                         <label class="form-check-label fw-bold" for="checkSaneamiento">¿Cuenta con Saneamiento?</label>
                     </div>
                 </div>
@@ -663,23 +663,23 @@
                     <tbody>
                         <tr>
                             <td class="fw-bold bg-light">FRENTE</td>
-                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_frente" value="{{ ficha.informe.medida_frente if ficha and ficha.informe else '' }}"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="colindante_frente" oninput="this.value = this.value.toUpperCase()" value="{{ ficha.informe.colindante_frente if ficha and ficha.informe else '' }}"></td>
+                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_frente" value="{{ beneficiario.informe.medida_frente if beneficiario and beneficiario.informe else '' }}"></td>
+                            <td><input type="text" class="form-control form-control-sm" name="colindante_frente" oninput="this.value = this.value.toUpperCase()" value="{{ beneficiario.informe.colindante_frente if beneficiario and beneficiario.informe else '' }}"></td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">DERECHA</td>
-                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_derecha" value="{{ ficha.informe.medida_derecha if ficha and ficha.informe else '' }}"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="colindante_derecha" oninput="this.value = this.value.toUpperCase()" value="{{ ficha.informe.colindante_derecha if ficha and ficha.informe else '' }}"></td>
+                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_derecha" value="{{ beneficiario.informe.medida_derecha if beneficiario and beneficiario.informe else '' }}"></td>
+                            <td><input type="text" class="form-control form-control-sm" name="colindante_derecha" oninput="this.value = this.value.toUpperCase()" value="{{ beneficiario.informe.colindante_derecha if beneficiario and beneficiario.informe else '' }}"></td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">IZQUIERDA</td>
-                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_izquierda" value="{{ ficha.informe.medida_izquierda if ficha and ficha.informe else '' }}"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="colindante_izquierda" oninput="this.value = this.value.toUpperCase()" value="{{ ficha.informe.colindante_izquierda if ficha and ficha.informe else '' }}"></td>
+                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_izquierda" value="{{ beneficiario.informe.medida_izquierda if beneficiario and beneficiario.informe else '' }}"></td>
+                            <td><input type="text" class="form-control form-control-sm" name="colindante_izquierda" oninput="this.value = this.value.toUpperCase()" value="{{ beneficiario.informe.colindante_izquierda if beneficiario and beneficiario.informe else '' }}"></td>
                         </tr>
                         <tr>
                             <td class="fw-bold bg-light">FONDO</td>
-                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_fondo" value="{{ ficha.informe.medida_fondo if ficha and ficha.informe else '' }}"></td>
-                            <td><input type="text" class="form-control form-control-sm" name="colindante_fondo" oninput="this.value = this.value.toUpperCase()" value="{{ ficha.informe.colindante_fondo if ficha and ficha.informe else '' }}"></td>
+                            <td><input type="number" step="0.01" class="form-control form-control-sm text-center" name="medida_fondo" value="{{ beneficiario.informe.medida_fondo if beneficiario and beneficiario.informe else '' }}"></td>
+                            <td><input type="text" class="form-control form-control-sm" name="colindante_fondo" oninput="this.value = this.value.toUpperCase()" value="{{ beneficiario.informe.colindante_fondo if beneficiario and beneficiario.informe else '' }}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -689,17 +689,17 @@
                 <div class="col-md-3 mb-3">
                     <label class="form-label fw-bold">Área de Terreno (m²)</label>
                     <input type="number" step="0.01" class="form-control" name="area_terreno"
-                           value="{{ ficha.informe.area_terreno if ficha and ficha.informe else '' }}">
+                           value="{{ beneficiario.informe.area_terreno if beneficiario and beneficiario.informe else '' }}">
                 </div>
                 <div class="col-md-9 mb-3">
                     <label class="form-label fw-bold">Descripci&oacute;n (Demoliciones, desmontajes, etc.)</label>
-                    <textarea class="form-control" name="descripcion" rows="3" oninput="this.value = this.value.toUpperCase()">{{ ficha.informe.descripcion if ficha and ficha.informe else '' }}</textarea>
+                    <textarea class="form-control" name="descripcion" rows="3" oninput="this.value = this.value.toUpperCase()">{{ beneficiario.informe.descripcion if beneficiario and beneficiario.informe else '' }}</textarea>
                 </div>
             </div>
 
             <div class="mt-4 text-end">
                 <button type="submit" class="btn btn-lg btn-success">
-                    {{ "Actualizar Matriz" if ficha else "Guardar Matriz" }}
+                    {{ "Actualizar Beneficiario" if beneficiario else "Guardar Beneficiario" }}
                 </button>
             </div>
         </form>

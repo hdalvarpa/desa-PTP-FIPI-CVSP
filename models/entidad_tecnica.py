@@ -1,7 +1,8 @@
 from models.database import db
+from models.entidad_proyecto import entidad_proyecto
 
 class EntidadTecnica(db.Model):
-    __tablename__ = 'entidades_tecnicas'
+    __tablename__ = 'entidad_tecnica'
     
     id_entidad_tecnica = db.Column(db.Integer, primary_key=True)
     ruc = db.Column(db.String(11), unique=True, nullable=False)
@@ -13,16 +14,12 @@ class EntidadTecnica(db.Model):
     rep_apellido_materno = db.Column(db.String(100), nullable=True)
     url_logo = db.Column(db.String(500), nullable=True)
     
-    id_ingeniero_vigente = db.Column(db.Integer, db.ForeignKey('ingenieros.id_ingeniero'), nullable=True)
+
     
     # Relationships
-    registros = db.relationship('RegistroET', backref='entidad_tecnica', cascade="all, delete-orphan")
-    fichas = db.relationship('FichaInscripcion', backref='entidad_tecnica', cascade="all, delete-orphan")
-    ingeniero_vigente = db.relationship('Ingeniero', foreign_keys=[id_ingeniero_vigente])
+    proyectos = db.relationship('Proyecto', secondary=entidad_proyecto, backref='entidades_tecnicas')
 
-    @property
-    def ingeniero_actual(self):
-        return self.ingeniero_vigente
+
     
     def __repr__(self):
         return f'<EntidadTecnica {self.razon_social}>'

@@ -1,8 +1,8 @@
 from models.database import db
-from models.usuario_entidad import usuarios_entidades
+from models.usuario_entidad import usuario_entidad
 
 class Usuario(db.Model):
-    __tablename__ = 'usuarios'
+    __tablename__ = 'usuario'
     
     id = db.Column('id_usuario', db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -11,7 +11,7 @@ class Usuario(db.Model):
     estado = db.Column(db.String(20), default='ACTIVO', nullable=False)
     
     # Relación con Entidades Técnicas (Muchos a Muchos)
-    entidades = db.relationship('EntidadTecnica', secondary=usuarios_entidades, backref=db.backref('usuarios_asignados', lazy='dynamic'))
+    entidades = db.relationship('EntidadTecnica', secondary=usuario_entidad, backref=db.backref('usuarios_asignados', lazy='dynamic'))
     
 
     def __repr__(self):

@@ -1,6 +1,6 @@
 {% extends "base_usuario.html" %}
 
-{% block title %}Matriz de {{ entidad.razon_social }}<script>
+{% block title %}Beneficiarios de {{ entidad.razon_social }}<script>
     function toggleAllCheckboxes(source) {
         checkboxes = document.querySelectorAll('.row-checkbox');
         for(var i=0, n=checkboxes.length;i<n;i++) {
@@ -26,7 +26,7 @@
         <p class="text-muted mb-0">Entidad: <strong>{{ entidad.razon_social }}</strong> (RUC: {{ entidad.ruc }})</p>
     </div>
     <div class="d-flex gap-2">
-        <a href="/portal/matriz/nuevo/{{ entidad.id_entidad_tecnica }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Crear Matriz</a>
+        <a href="/portal/matriz/nuevo/{{ entidad.id_entidad_tecnica }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Crear Beneficiario</a>
         <a href="/portal/entidades" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver a mis Entidades</a>
     </div>
 </div>
@@ -47,57 +47,57 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for ficha in fichas %}
+                    {% for b in beneficiarios %}
                     <tr aria-expanded="false" style="cursor: pointer;" class="accordion-toggle">
                         <td class="ps-4" onclick="event.stopPropagation();">
-                            <input class="form-check-input row-checkbox" type="checkbox" value="{{ ficha.id_ficha }}">
+                            <input class="form-check-input row-checkbox" type="checkbox" value="{{ b.id_beneficiario_jefe }}">
                         </td>
-                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ ficha.id_ficha }}"><span class="badge bg-secondary">ET-{{ "%04d" % ficha.id_ficha }}</span></td>
-                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ ficha.id_ficha }}">
+                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ b.id_beneficiario_jefe }}"><span class="badge bg-secondary">ET-{{ "%04d" % b.id_beneficiario_jefe }}</span></td>
+                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ b.id_beneficiario_jefe }}">
                             {% if ficha.jefe %}
-                            <span class="fw-bold">{{ ficha.jefe.ap_paterno }} {{ ficha.jefe.ap_materno }} {{ ficha.jefe.nombres }}</span><br>
-                            <small class="text-muted">DNI: {{ ficha.jefe.dni }}</small>
+                            <span class="fw-bold">{{ b.ap_paterno }} {{ b.ap_materno }} {{ b.nombres }}</span><br>
+                            <small class="text-muted">DNI: {{ b.dni }}</small>
                             {% else %}
                             <span class="text-muted fst-italic">Sin titular</span>
                             {% endif %}
                         </td>
-                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ ficha.id_ficha }}">
-                            {% if ficha.predio %}
-                            <span class="text-dark">{{ ficha.predio.direccion or '-' }}</span><br>
-                            <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ ficha.predio.distrito or '-' }} - {{ ficha.predio.provincia or '-' }}</small>
+                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ b.id_beneficiario_jefe }}">
+                            {% if b.predio %}
+                            <span class="text-dark">{{ b.predio.direccion or '-' }}</span><br>
+                            <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ b.predio.distrito or '-' }} - {{ b.predio.provincia or '-' }}</small>
                             {% else %}
                             <span class="text-muted fst-italic">Sin predio</span>
                             {% endif %}
                         </td>
-                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ ficha.id_ficha }}" class="text-end pe-4">
+                        <td data-bs-toggle="collapse" data-bs-target="#collapseRow{{ b.id_beneficiario_jefe }}" class="text-end pe-4">
                             <i class="bi bi-chevron-down text-muted fs-5 transition-transform" style="transition: transform 0.3s ease;"></i>
                         </td>
                     </tr>
                     <!-- Fila Oculta con los Botones -->
                     <tr>
                         <td colspan="5" class="p-0 border-0">
-                            <div class="collapse" id="collapseRow{{ ficha.id_ficha }}">
+                            <div class="collapse" id="collapseRow{{ b.id_beneficiario_jefe }}">
                                 <div class="p-4 bg-light bg-gradient border-bottom d-flex align-items-center justify-content-between">
                                     <div class="text-muted small">
                                         <i class="bi bi-info-circle me-1"></i> Selecciona un documento para iniciar la descarga.
                                     </div>
                                     <div class="d-flex flex-wrap gap-2">
-                                        <a href="/portal/generar/{{ ficha.id_ficha }}" class="btn btn-danger shadow-sm text-white" title="Descargar Ficha de Inscripción (PDF)">
+                                        <a href="/portal/generar/{{ b.id_beneficiario_jefe }}" class="btn btn-danger shadow-sm text-white" title="Descargar Ficha de Inscripción (PDF)">
                                             <i class="bi bi-file-earmark-pdf me-1"></i> Ficha de Inscripción
                                         </a>
-                                        <a href="/portal/descargar_informe/{{ ficha.id_ficha }}" class="btn btn-primary shadow-sm" title="Descargar Informe Técnico (Word)">
+                                        <a href="/portal/descargar_informe/{{ b.id_beneficiario_jefe }}" class="btn btn-primary shadow-sm" title="Descargar Informe Técnico (Word)">
                                             <i class="bi bi-file-earmark-word me-1"></i> Informe Técnico
                                         </a>
-                                        <button type="button" class="btn btn-info text-white shadow-sm" title="Descargar Constatación (Word)" onclick="abrirModalActas('{{ ficha.id_ficha }}', 'constatacion')">
+                                        <button type="button" class="btn btn-info text-white shadow-sm" title="Descargar Constatación (Word)" onclick="abrirModalActas('{{ b.id_beneficiario_jefe }}', 'constatacion')">
                                             <i class="bi bi-file-earmark-word me-1"></i> Formato de Constatación
                                         </a>
-                                        <button type="button" class="btn btn-success shadow-sm" title="Descargar Todo (ZIP)" onclick="abrirModalActas('{{ ficha.id_ficha }}', 'zip')">
+                                        <button type="button" class="btn btn-success shadow-sm" title="Descargar Todo (ZIP)" onclick="abrirModalActas('{{ b.id_beneficiario_jefe }}', 'zip')">
                                             <i class="bi bi-file-zip me-1"></i> Todos (ZIP)
                                         </button>
-                                        <a href="/portal/matriz/editar/{{ ficha.id_ficha }}" class="btn btn-warning shadow-sm" title="Editar Ficha">
+                                        <a href="/portal/matriz/editar/{{ b.id_beneficiario_jefe }}" class="btn btn-warning shadow-sm" title="Editar Ficha">
                                             <i class="bi bi-pencil-square me-1"></i> Editar
                                         </a>
-                                        <button type="button" class="btn btn-outline-danger shadow-sm" title="Eliminar Ficha" data-bs-toggle="modal" data-bs-target="#modalEliminar-{{ ficha.id_ficha }}">
+                                        <button type="button" class="btn btn-outline-danger shadow-sm" title="Eliminar Ficha" data-bs-toggle="modal" data-bs-target="#modalEliminar-{{ b.id_beneficiario_jefe }}">
                                             <i class="bi bi-trash me-1"></i> Eliminar
                                         </button>
                                     </div>
@@ -127,18 +127,18 @@
     }
 </script>
 
-{% for ficha in fichas %}
+{% for b in beneficiarios %}
 <!-- Modal Eliminar -->
-<div class="modal fade" id="modalEliminar-{{ ficha.id_ficha }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalEliminar-{{ b.id_beneficiario_jefe }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="/portal/matriz/eliminar/{{ ficha.id_ficha }}" method="POST">
+        <form action="/portal/matriz/eliminar/{{ b.id_beneficiario_jefe }}" method="POST">
             <div class="modal-content text-dark">
                 <div class="modal-header">
                     <h5 class="modal-title text-danger">⚠️ Confirmar Eliminación</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-start">
-                    <p>¿Estás seguro de que deseas eliminar la ficha de <strong>{{ ficha.jefe.nombres if ficha.jefe else 'esta persona' }} {{ ficha.jefe.ap_paterno if ficha.jefe else '' }}</strong> (DNI: {{ ficha.jefe.dni if ficha.jefe else 'N/A' }})?</p>
+                    <p>¿Estás seguro de que deseas eliminar la ficha de <strong>{{ b.nombres if ficha.jefe else 'esta persona' }} {{ b.ap_paterno if ficha.jefe else '' }}</strong> (DNI: {{ b.dni if ficha.jefe else 'N/A' }})?</p>
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

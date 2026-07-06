@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Asignaciones de Códigos de Registro</h2>
+    <h2>Asignaciones de Proyectos</h2>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaAsignacion">
-        ➕ Asignar Código a Empresa
+        ➕ Asignar Proyecto a Empresa
     </button>
 </div>
 
@@ -26,22 +26,22 @@
             <thead class="table-light">
                 <tr>
                     <th scope="col">Año</th>
-                    <th scope="col">Código de Registro</th>
+                    <th scope="col">Código de Proyecto</th>
                     <th scope="col">Entidad Técnica (Empresa)</th>
                     <th scope="col">RUC</th>
                     <th scope="col" class="text-end">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for reg in asignaciones %}
+                {% for asig in asignaciones %}
                 <tr>
-                    <td><strong>{{ reg.anio }}</strong></td>
-                    <td><span class="badge bg-primary px-3 py-2" style="font-size: 0.9rem;">{{ reg.codigo_registro }}</span></td>
-                    <td>{{ reg.entidad_tecnica.razon_social }}</td>
-                    <td><span style="color: #cbd5e1 !important;">{{ reg.entidad_tecnica.ruc }}</span></td>
+                    <td><strong>{{ asig.proyecto.anio }}</strong></td>
+                    <td><span class="badge bg-primary px-3 py-2" style="font-size: 0.9rem;">{{ asig.proyecto.codigo_registro }}</span></td>
+                    <td>{{ asig.entidad.razon_social }}</td>
+                    <td><span style="color: #cbd5e1 !important;">{{ asig.entidad.ruc }}</span></td>
                     <td class="text-end">
-                        <form action="/asignacion_registros/eliminar/{{ reg.id_registro_et }}" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('¿Quitar la asignación? El código quedará libre de nuevo.');">
+                        <form action="/asignacion_proyectos/eliminar/{{ asig.entidad.id_entidad_tecnica }}/{{ asig.proyecto.id_proyecto }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('¿Quitar la asignación?');">
                                 🔗 Desvincular
                             </button>
                         </form>
@@ -50,7 +50,7 @@
                 {% endfor %}
                 {% if not asignaciones %}
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">No hay códigos asignados a ninguna entidad.</td>
+                    <td colspan="5" class="text-center text-muted py-4">No hay proyectos asignados a ninguna entidad.</td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -61,10 +61,10 @@
 <!-- Modal Nueva Asignación -->
 <div class="modal fade" id="modalNuevaAsignacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="/asignacion_registros/crear" method="POST">
+        <form action="/asignacion_proyectos/crear" method="POST">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Asignar Código Disponible a Entidad</h5>
+                    <h5 class="modal-title">Asignar Proyecto Disponible a Entidad</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-start">
@@ -80,16 +80,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Código de Registro Disponible</label>
-                        <select class="form-select" name="id_registro_et" required>
-                            <option value="">-- Seleccione un Código Libre --</option>
-                            {% for reg in registros_libres %}
-                                <option value="{{ reg.id_registro_et }}">
-                                    {{ reg.codigo_registro }} (Año {{ reg.anio }})
+                        <label class="form-label">Proyecto Disponible</label>
+                        <select class="form-select" name="id_proyecto" required>
+                            <option value="">-- Seleccione un Proyecto Libre --</option>
+                            {% for proyecto in proyectos_libres %}
+                                <option value="{{ proyecto.id_proyecto }}">
+                                    {{ proyecto.codigo_registro }} (Año {{ proyecto.anio }}) - {{ proyecto.descripcion or 'Sin descripción' }}
                                 </option>
                             {% endfor %}
                         </select>
-                        <div class="form-text">Aquí solo aparecen los códigos que NO han sido asignados aún a ninguna empresa.</div>
+                        <div class="form-text">Aquí solo aparecen los proyectos que NO han sido asignados aún a ninguna empresa.</div>
                     </div>
                     
                 </div>

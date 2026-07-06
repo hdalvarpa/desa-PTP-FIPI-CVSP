@@ -22,26 +22,29 @@
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th scope="col">Entidad Técnica</th>
-                    <th scope="col">RUC</th>
+                    <th scope="col">Proyecto</th>
+                    <th scope="col">Año</th>
                     <th scope="col">Ingeniero Vigente</th>
                     <th scope="col">CIP</th>
                     <th scope="col" class="text-end">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for entidad in entidades %}
+                {% for proyecto in proyectos %}
                 <tr>
-                    <td><strong>{{ entidad.razon_social }}</strong></td>
-                    <td>{{ entidad.ruc }}</td>
-                    {% if entidad.ingeniero_vigente %}
-                        <td>{{ entidad.ingeniero_vigente.apellido_paterno }} {{ entidad.ingeniero_vigente.apellido_materno or '' }}, {{ entidad.ingeniero_vigente.nombres }}</td>
-                        <td><span class="badge bg-primary px-3 py-2">CIP: {{ entidad.ingeniero_vigente.cip }}</span></td>
+                    <td><strong>{{ proyecto.codigo_registro }}</strong></td>
+                    <td>{{ proyecto.anio }}</td>
+                    {% if proyecto.ingeniero_actual %}
+                        <td>{{ proyecto.ingeniero_actual.ingeniero_rel.apellido_paterno }} {{ proyecto.ingeniero_actual.ingeniero_rel.apellido_materno or '' }}, {{ proyecto.ingeniero_actual.ingeniero_rel.nombres }}</td>
+                        <td><span class="badge bg-primary px-3 py-2">CIP: {{ proyecto.ingeniero_actual.ingeniero_rel.cip }}</span></td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaAsignacion" onclick="abrirModalAsignacion('{{ entidad.id_entidad_tecnica }}', '{{ entidad.razon_social }}')">
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalHistorial{{ proyecto.id_proyecto }}">
+                                📜 Historial
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaAsignacion" onclick="abrirModalAsignacion('{{ proyecto.id_proyecto }}', '{{ proyecto.codigo_registro }}')">
                                 ✏️ Cambiar
                             </button>
-                            <form action="/asignacion_ingenieros/eliminar/{{ entidad.id_entidad_tecnica }}" method="POST" style="display: inline;">
+                            <form action="/asignacion_ingenieros/eliminar/{{ proyecto.ingeniero_actual.id_asignacion }}" method="POST" style="display: inline;">
                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desvincular a este ingeniero de la entidad?');">
                                     🗑️ Quitar
                                 </button>
@@ -51,16 +54,21 @@
                         <td class="text-muted"><em>Sin ingeniero asignado</em></td>
                         <td>-</td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaAsignacion" onclick="abrirModalAsignacion('{{ entidad.id_entidad_tecnica }}', '{{ entidad.razon_social }}')">
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalHistorial{{ proyecto.id_proyecto }}">
+                                📜 Historial
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaAsignacion" onclick="abrirModalAsignacion('{{ proyecto.id_proyecto }}', '{{ proyecto.codigo_registro }}')">
                                 ➕ Asignar
                             </button>
                         </td>
                     {% endif %}
                 </tr>
+                
+
                 {% endfor %}
-                {% if not entidades %}
+                {% if not proyectos %}
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">No tienes entidades técnicas permitidas.</td>
+                    <td colspan="5" class="text-center text-muted py-4">No hay proyectos registrados.</td>
                 </tr>
                 {% endif %}
             </tbody>
@@ -68,21 +76,72 @@
     </div>
 </div>
 
+<!-- Modales de Historial (Fuera de la tabla para no romper el diseño HTML) -->
+{% for proyecto in proyectos %}
+<div class="modal fade" id="modalHistorial{{ proyecto.id_proyecto }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Historial de Ingenieros - {{ proyecto.codigo_registro }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start">
+                {% if proyecto.ingenieros_historico %}
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ingeniero</th>
+                                <th>CIP</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asig in proyecto.ingenieros_historico %}
+                            <tr>
+                                <td>{{ asig.ingeniero_rel.nombres }} {{ asig.ingeniero_rel.apellido_paterno }}</td>
+                                <td>{{ asig.ingeniero_rel.cip }}</td>
+                                <td>{{ asig.fecha_inicio.strftime('%d/%m/%Y') if asig.fecha_inicio else '-' }}</td>
+                                <td>{{ asig.fecha_fin.strftime('%d/%m/%Y') if asig.fecha_fin else '-' }}</td>
+                                <td>
+                                    {% if asig.estado_activo %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted text-center py-3">Este proyecto no tiene historial de ingenieros.</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 <!-- Modal Nueva Asignación -->
 <div class="modal fade" id="modalNuevaAsignacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form action="/asignacion_ingenieros/crear" method="POST">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Asignar Ingeniero a Entidad</h5>
+                    <h5 class="modal-title">Asignar Ingeniero a Proyecto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-start">
                     
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Entidad Técnica a Asignar:</label>
-                        <h5 id="display_nombre_entidad" class="text-info fw-bold"></h5>
-                        <input type="hidden" name="id_entidad_tecnica" id="hidden_id_entidad" required>
+                        <label class="form-label fw-bold">Proyecto a Asignar:</label>
+                        <h5 id="display_nombre_proyecto" class="text-info fw-bold"></h5>
+                        <input type="hidden" name="id_proyecto" id="hidden_id_proyecto" required>
                     </div>
 
                     <div class="mb-3">
@@ -95,7 +154,7 @@
                                 </option>
                             {% endfor %}
                         </select>
-                        <div class="form-text">Si el ingeniero o la entidad no aparecen, debes registrarlos primero en sus respectivas pantallas.</div>
+                        <div class="form-text">Si el ingeniero o el proyecto no aparecen, debes registrarlos primero en sus respectivas pantallas.</div>
                     </div>
                     
                 </div>
@@ -109,9 +168,9 @@
 </div>
 
 <script>
-function abrirModalAsignacion(idEntidad, nombreEntidad) {
-    document.getElementById('hidden_id_entidad').value = idEntidad;
-    document.getElementById('display_nombre_entidad').textContent = nombreEntidad;
+function abrirModalAsignacion(idProyecto, nombreProyecto) {
+    document.getElementById('hidden_id_proyecto').value = idProyecto;
+    document.getElementById('display_nombre_proyecto').textContent = nombreProyecto;
 }
 </script>
 {% endblock %}
